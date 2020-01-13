@@ -1,0 +1,175 @@
+Brain Vision Data Exchange Header File Version 1.0
+
+[Common Infos]
+Codepage=UTF-8
+DataFile=2019_12_5_T03_U010_EEG01.eeg
+MarkerFile=2019_12_5_T03_U010_EEG01.vmrk
+DataFormat=BINARY
+DataOrientation=MULTIPLEXED
+DataType=TIMEDOMAIN
+NumberOfChannels=82
+DataPoints=22528
+SamplingInterval=2000
+
+[Binary Infos]
+BinaryFormat=IEEE_FLOAT_32
+UseBigEndianOrder=NO
+
+[Channel Infos]
+ch1=Fp1,,1000000,uV
+ch2=Fp2,,1000000,uV
+ch3=F3,,1000000,uV
+ch4=F4,,1000000,uV
+ch5=C3,,1000000,uV
+ch6=C4,,1000000,uV
+ch7=P3,,1000000,uV
+ch8=P4,,1000000,uV
+ch9=O1,,1000000,uV
+ch10=O2,,1000000,uV
+ch11=F7,,1000000,uV
+ch12=F8,,1000000,uV
+ch13=T7,,1000000,uV
+ch14=T8,,1000000,uV
+ch15=P7,,1000000,uV
+ch16=P8,,1000000,uV
+ch17=Fz,,1000000,uV
+ch18=Cz,,1000000,uV
+ch19=Pz,,1000000,uV
+ch20=Oz,,1000000,uV
+ch21=FC1,,1000000,uV
+ch22=FC2,,1000000,uV
+ch23=CP1,,1000000,uV
+ch24=CP2,,1000000,uV
+ch25=FC5,,1000000,uV
+ch26=FC6,,1000000,uV
+ch27=CP5,,1000000,uV
+ch28=CP6,,1000000,uV
+ch29=FT9,,1000000,uV
+ch30=FT10,,1000000,uV
+ch31=FCz,,1000000,uV
+ch32=AFz,,1000000,uV
+ch33=F1,,1000000,uV
+ch34=F2,,1000000,uV
+ch35=C1,,1000000,uV
+ch36=C2,,1000000,uV
+ch37=P1,,1000000,uV
+ch38=P2,,1000000,uV
+ch39=AF3,,1000000,uV
+ch40=AF4,,1000000,uV
+ch41=FC3,,1000000,uV
+ch42=FC4,,1000000,uV
+ch43=CP3,,1000000,uV
+ch44=CP4,,1000000,uV
+ch45=PO3,,1000000,uV
+ch46=PO4,,1000000,uV
+ch47=F5,,1000000,uV
+ch48=F6,,1000000,uV
+ch49=C5,,1000000,uV
+ch50=C6,,1000000,uV
+ch51=P5,,1000000,uV
+ch52=P6,,1000000,uV
+ch53=AF7,,1000000,uV
+ch54=AF8,,1000000,uV
+ch55=FT7,,1000000,uV
+ch56=FT8,,1000000,uV
+ch57=TP7,,1000000,uV
+ch58=TP8,,1000000,uV
+ch59=PO7,,1000000,uV
+ch60=PO8,,1000000,uV
+ch61=Fpz,,1000000,uV
+ch62=CPz,,1000000,uV
+ch63=POz,,1000000,uV
+ch64=TP10,,1000000,uV
+ch65=ExG 1,,1000000,uV
+ch66=ExG 2,,1000000,uV
+ch67=ExG 3,,1000000,uV
+ch68=ExG 4,,1000000,uV
+ch69=ECG.,,1000000,uV
+ch70=Resp.,,1000,Ω
+ch71=PPG,,1000000,ADU
+ch72=SpO2,,1,%
+ch73=HR,,1,BPM
+ch74=GSR,,1000,Ω
+ch75=Temp.,,1,C
+ch76=AUX 1,,1000000,uV
+ch77=AUX 2,,1000000,uV
+ch78=ACC77,,1000,mg
+ch79=ACC78,,1000,mg
+ch80=ACC79,,1000,mg
+ch81=Packet Counter,,1,DIGITAL
+ch82=TRIGGER,,1,DIGITAL
+
+
+
+[Comment]
+
+
+Recording Start Time
+2019-12-05 15:11:30.963
+
+
+Channel 	 Name 	 Impedance (kOhm) 	 Offset (mV)
+0 	 Fp1 	 26 	 4
+1 	 Fp2 	 26 	 9
+2 	 F3 	 26 	 -6
+3 	 F4 	 24 	 -9
+4 	 C3 	 22 	 -8
+5 	 C4 	 28 	 -8
+6 	 P3 	 78 	 -1
+7 	 P4 	 45 	 -8
+8 	 O1 	 59 	 2
+9 	 O2 	 31 	 -13
+10 	 F7 	 25 	 -5
+11 	 F8 	 71 	 -1
+12 	 T7 	 3365 	 30
+13 	 T8 	 25 	 8
+14 	 P7 	 19 	 -7
+15 	 P8 	 65 	 12
+16 	 Fz 	 33 	 -4
+17 	 Cz 	 13 	 -8
+18 	 Pz 	 36 	 -8
+19 	 Oz 	 81 	 -3
+20 	 FC1 	 21 	 4
+21 	 FC2 	 36 	 -11
+22 	 CP1 	 19 	 -6
+23 	 CP2 	 113 	 -18
+24 	 FC5 	 19 	 1
+25 	 FC6 	 60 	 12
+26 	 CP5 	 56 	 -4
+27 	 CP6 	 42 	 -1
+28 	 FT9 	 12 	 11
+29 	 FT10 	 82 	 -31
+30 	 FCz 	 30 	 -8
+31 	 AFz 	 23 	 5
+32 	 F1 	 15 	 -1
+33 	 F2 	 31 	 -8
+34 	 C1 	 15 	 -10
+35 	 C2 	 55 	 -13
+36 	 P1 	 19 	 -6
+37 	 P2 	 46 	 -8
+38 	 AF3 	 29 	 -1
+39 	 AF4 	 27 	 -5
+40 	 FC3 	 22 	 -1
+41 	 FC4 	 45 	 -9
+42 	 CP3 	 39 	 -3
+43 	 CP4 	 37 	 -3
+44 	 PO3 	 50 	 2
+45 	 PO4 	 26 	 -12
+46 	 F5 	 32 	 -3
+47 	 F6 	 47 	 -1
+48 	 C5 	 25 	 -5
+49 	 C6 	 59 	 4
+50 	 P5 	 49 	 -5
+51 	 P6 	 65 	 1
+52 	 AF7 	 25 	 0
+53 	 AF8 	 29 	 0
+54 	 FT7 	 33 	 -2
+55 	 FT8 	 14 	 2
+56 	 TP7 	 74 	 -9
+57 	 TP8 	 45 	 2
+58 	 PO7 	 38 	 -5
+59 	 PO8 	 69 	 -3
+60 	 Fpz 	 32 	 10
+61 	 CPz 	 22 	 -5
+62 	 POz 	 67 	 -10
+63 	 TP10 	 41 	 2
