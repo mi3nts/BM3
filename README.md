@@ -17,7 +17,7 @@ __BM3__ is designed to be mobile and easy to use. To get started complete the fo
 1. Clone/install the repo (https://github.com/mi3nts/BM3) to your desired working folder
 2. Navigate to the following directory: BM3/codes/functions
 3. Call the function homeDir(). This function changes the current directory to BM3/ and adds any necessary paths. 
-4. BM3 is now ready to use!
+4. __BM3__ is now ready to use!
 
 ## Backend
 
