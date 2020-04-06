@@ -23,7 +23,7 @@ __BM3__ is designed to be mobile and easy to use. To get started complete the fo
 
 The __BM3__ library includes functions built using the EEGLAB library. EEGLAB is an open source signal processing environment for electrophysiological signals running on MATLAB and developed at the SCCN/UCSD https://eeglab.ucsd.edu/. A compatible version of EEGLAB is included with BM3 in the /backend subdirectory.
 
-The latest version of EEGLAB can be downloaded here: https://sccn.ucsd.edu/eeglab/download.php. __NOTE__: newer versions of EEGLAB (later than 2019_0) may not be compatible with __BM3__. For guaranteed operation please use version of EEGLAB provided.
+The latest version of EEGLAB can be downloaded here: https://sccn.ucsd.edu/eeglab/download.php. __NOTE__: newer versions of EEGLAB (later than 2019_0) may not be compatible with __BM3__. For guaranteed operation please use the version of EEGLAB provided.
 
 More information on EEGLAB can be found here: https://sccn.ucsd.edu/eeglab/index.php
 
