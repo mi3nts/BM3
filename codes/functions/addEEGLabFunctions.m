@@ -5,8 +5,8 @@
 % MULTI-INTEGRATED REMOTE SENSING AND SIMULATION (MINTS)
 
 %% Add necessary eeglab functions
-addpath('./backend/eeglab2019_0/functions/popfunc');
-addpath('./backend/eeglab2019_0/functions/adminfunc');
-addpath('./backend/eeglab2019_0/functions/sigprocfunc');
-addpath('./backend/eeglab2019_0/functions/guifunc');
-addpath('./backend/eeglab2019_0/plugins/Fileio20190329');
+addpath('./backend/eeglab2019_1/functions/popfunc');
+addpath('./backend/eeglab2019_1/functions/adminfunc');
+addpath('./backend/eeglab2019_1/functions/sigprocfunc');
+addpath('./backend/eeglab2019_1/functions/guifunc');
+addpath('./backend/eeglab2019_1/plugins/Fileio20200130');

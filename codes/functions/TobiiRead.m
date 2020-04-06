@@ -536,13 +536,16 @@ function[] = TobiiRead(YEAR, MONTH, DAY, TRIAL, USER, Tobii)
         command = [command ');'];
         eval(command)
     end
-
+    
+     % -------------------------------------------------------------------------
+    % Remove values with errors
     % -------------------------------------------------------------------------
-    % TABLES 
+    TobiiTimetable = TobiiRemoveErrors(TobiiTimetable);
+    
     % -------------------------------------------------------------------------
-    % create table for Tobii Data
-    TobiiTable = timetable2table(TobiiTimetable);
-    TobiiAuxTable = timetable2table(TobiiAuxTimetable);
+    % Compute and append additional pupil and gaze variables
+    % -------------------------------------------------------------------------
+    TobiiTimetable = getPDAllVars(TobiiTimetable);
 
     % -------------------------------------------------------------------------
     % Save objects 

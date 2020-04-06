@@ -9,11 +9,19 @@
 %     DEVICE =  STRING. 
 %         SUPPORTED INPUTS: 'EEGXX', 'TobiiXX', 'Synchronized'
 
+% OUTPUTS
+%     Timetable = TIMETABLE DATA STRUCTURE. TIMETABLE CORRESEPONDING TO
+%     INPUT STRINGS
+%     ID = STRING. ID OF TIMETABLE DATA STRUCTURE
+%     pathID = STRING. RELATIVE PATH OF TIMETABLE DATA STRUCTURE
+%     TTname = STRING. NAME OF TIMETABLE TO SPECIFIES THE KIND OF DATA IN 
+%       TIMETABLE.
+
 % CODE AUTHORED BY: SHAWHIN TALEBI
 % THE UNIVERSITY OF TEXAS AT DALLAS
 % MULTI-INTEGRATED REMOTE SENSING AND SIMULATION (MINTS)
 
-function [Timetable, ID, pathID, TT] = LoadTimetable(YEAR, MONTH, DAY,...
+function [Timetable, ID, pathID, TTname] = LoadTimetable(YEAR, MONTH, DAY,...
     TRIAL, USER, DEVICE)
 
 % define ID and pathID
@@ -22,23 +30,23 @@ function [Timetable, ID, pathID, TT] = LoadTimetable(YEAR, MONTH, DAY,...
 % adjust ID and pathID based on DEVICE
 if strcmp(DEVICE, 'Synchronized')
     
-    TT = 'EEGAccelTobiiTimetable';
-    ID = strcat(ID, '_', TT);
-    pathID = insertBefore(pathID,'Synchronized','_');
+    TTname = 'EEGAccelTobiiTimetable';
+    ID = strcat(ID, '_', TTname);
+%     pathID = insertBefore(pathID,'Synchronized','_');
     
 elseif strcmp(DEVICE(1:3), 'EEG')
 
-    TT = 'EEGAccelTimetable';
-    ID = strcat(ID, '_', TT);
+    TTname = 'EEGAccelTimetable';
+    ID = strcat(ID, '_', TTname);
     
 elseif strcmp(DEVICE(1:5), 'Tobii')
     
-    TT = 'TobiiTimetable';
-    ID = strcat(ID, '_', TT);
+    TTname = 'TobiiTimetable';
+    ID = strcat(ID, '_', TTname);
 end
 
 % load desired timetable
 load(strcat('objects/', pathID,'/',ID,'.mat'));
 
 % relabel timetable as output
-eval(strcat("Timetable = ", TT, ';'));
+eval(strcat("Timetable = ", TTname, ';'));

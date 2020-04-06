@@ -26,16 +26,6 @@ function [] = EEGTobiiSync(YEAR, MONTH, DAY, TRIAL, USER, EEG, Tobii)
     pathTobii = strcat('objects/', pathID, Tobii, '/', ID, Tobii, ...
         '_TobiiTimetable.mat');
 
-%     % change directory to proper parent
-%     str = pwd;
-%     if strcmp(str(end-12:end), 'Synchronizing')
-%         idcs = strfind(pwd,filesep);
-%         eval(strcat("cd ", (str(1:idcs(end-2)))))
-%     end
-
-    % change number format to long
-    format long
-
     %% LOAD TIMETABLES
 
     load(pathEEG);
@@ -46,12 +36,14 @@ function [] = EEGTobiiSync(YEAR, MONTH, DAY, TRIAL, USER, EEG, Tobii)
     % define timestep
     dt = milliseconds(2);
 
+    % reconfigure timesteps to be uniform
     EEGAccelTimetable = retime(EEGAccelTimetable,'regular'...
         ,'next','TimeStep', dt);
 
-    disp('Using nanmean to get new time intervals for Tobii timetable... this may take a while')
-    TobiiTimetable = retime(TobiiTimetable,'regular'...
-        ,@nanmean,'TimeStep', dt);
+    % reconfigure timesteps to be uniform
+    TobiiTimetable = retime(TobiiTimetable,...
+        'regular', 'fillwithmissing', ...
+        'TimeStep', dt);
 
     %% SYNCHRONIZE TIMETABLES
 

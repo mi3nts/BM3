@@ -17,4 +17,8 @@ MONTH = temp{2};
 DAY = temp{3};
 TRIAL = temp{4};
 USER = temp{5};
-DEVICE = temp{6};
+try
+    DEVICE = temp{6};
+catch
+    DEVICE = [];
+end
