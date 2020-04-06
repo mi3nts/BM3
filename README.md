@@ -2,7 +2,7 @@
 
 ## About
 
-__BM3__ is a hierarchical file system and function library written using MATLAB that can be used to organize, analyze, and visualize biometric data. The file system consists of a home directory called __BM3__. The home directory has the following five subdirectories:
+__BM3__ is a hierarchical file system and function library implemented in MATLAB that can be used to organize, analyze, and visualize biometric data. The file system consists of a home directory called __BM3__. The home directory has the following five subdirectories:
 
 * __backend__  - dependencies beyond BM3’s function definitions 
 * __codes__ - codes and functions for data organization, analysis, and visualization 
