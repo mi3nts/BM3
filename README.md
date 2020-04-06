@@ -29,7 +29,7 @@ More information on EEGLAB can be found here: https://sccn.ucsd.edu/eeglab/index
 
 ## Codes
 
-Example codes and function source codes can be found in the /codes subdirectory. Example codes should run fine without any preceding steps. However, before calling functions it is important to follow the steps outlined in the Quickstart section of this documentation.
+Example codes and function source codes can be found in the /codes subdirectory. Example codes should run fine without any preceding steps. In contrast, before calling functions it is important to follow the steps outlined in the Quickstart section of this documentation.
 
 The simplest way to call __BM3__ functions is from the command window. However, this may not always be practical. To use library functions in user-defined scripts complete the following steps:
 
