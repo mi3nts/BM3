@@ -14,6 +14,10 @@ function Timetable = TobiiRemoveErrors(Timetable)
 
     % get indicies bad records for for each error variable
     for i=1:10
+        % round up error values in ith column
+        eval(strcat("Timetable.", errorVarNames(i) ,"=ceil(Timetable.", ...
+            errorVarNames(i), ");"));
+        
         % get records for ith error variable
         eval(strcat("errorRows", string(i)," = find(Timetable.",...
             errorVarNames(i)," ~= 0);"));

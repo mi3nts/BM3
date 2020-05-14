@@ -26,6 +26,9 @@ function [mergedObject, fileIDs] = LoadMergeAll(dataObjectName, DEVICE)
     objectStruct.objectKind = dataObjectName;
 
     %% LOAD ALL OBJECTS INTO WORKSPACE
+    
+    % initialize array to hold number of columns of object
+    numColumns = 0;
 
     for ID = fileIDs
 
@@ -35,6 +38,10 @@ function [mergedObject, fileIDs] = LoadMergeAll(dataObjectName, DEVICE)
         % load object corresponding to ID
         [Object, ID] = LoadObject(YEAR, MONTH, DAY,...
             TRIAL, USER, DEVICE, dataObjectName);
+        
+        % update numColumns array
+        sizeObject = size(Object);
+        numColumns = [numColumns; sizeObject(2)];
 
         % rename object to include ID name
         eval(strcat('objectStruct.ID_', ID,' = Object;'));
@@ -51,6 +58,11 @@ function [mergedObject, fileIDs] = LoadMergeAll(dataObjectName, DEVICE)
 
     % append timetables in chronological order
     for i = 2:length(objectCell)
+        
+        % do not merge objects with less columns than max
+        if numColumns(i) < max(numColumns)
+            continue
+        end
 
         mergedObject = [mergedObject; objectCell{i}];
         

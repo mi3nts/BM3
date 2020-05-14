@@ -16,48 +16,57 @@
 
 function [] = EEGTobiiSync(YEAR, MONTH, DAY, TRIAL, USER, EEG, Tobii)
 
-    % define ID and pathID
-    ID = strcat(YEAR, '_', MONTH, '_',DAY, '_',TRIAL, '_',USER, '_');
-    pathID = strrep(ID,'_','/');
+    % get ID and pathID
+    [ID, pathID] = makeIDs(YEAR, MONTH, DAY, TRIAL, USER, []);
 
-    % define path for EEG and Tobii data
-    pathEEG = strcat('objects/', pathID, EEG, '/', ID, EEG, ...
-        '_EEGAccelTimetable.mat');
-    pathTobii = strcat('objects/', pathID, Tobii, '/', ID, Tobii, ...
-        '_TobiiTimetable.mat');
+    % load timetables
+    EEGAccelTimetable = LoadTimetable(YEAR, MONTH, DAY, TRIAL, USER, EEG);
+    TobiiTimetable = LoadTimetable(YEAR, MONTH, DAY, TRIAL, USER, Tobii);
+    %% TIME OFFSET FROM CROSS CORRELATION
 
-    %% LOAD TIMETABLES
+    % compute time offset
+    offset = computeTimeOffset(TobiiTimetable, EEGAccelTimetable);
 
-    load(pathEEG);
-    load(pathTobii);
-
+    % add offset to tobii timetable 
+    TobiiTimetable.Datetime = TobiiTimetable.Datetime + offset;
     %% RESAMPLE TIMETABLES
 
-    % define timestep
-    dt = milliseconds(2);
+    % define timestep of 0.5 millisecond
+    dt = milliseconds(0.5);  
 
-    % reconfigure timesteps to be uniform
-    EEGAccelTimetable = retime(EEGAccelTimetable,'regular'...
-        ,'next','TimeStep', dt);
-
-    % reconfigure timesteps to be uniform
-    TobiiTimetable = retime(TobiiTimetable,...
-        'regular', 'fillwithmissing', ...
+    % reconfigure timesteps to have 0.5 ms intervals
+    EEGAccelTimetable = retime(EEGAccelTimetable, ...
+        'regular', ...
+        'fillwithmissing', ...
         'TimeStep', dt);
 
+    TobiiTimetable = retime(TobiiTimetable, ...
+        'regular', ...
+        'fillwithmissing', ...
+        'TimeStep', dt);
     %% SYNCHRONIZE TIMETABLES
 
-    EEGAccelTobiiTimetable = synchronize(EEGAccelTimetable,...
-        TobiiTimetable, 'intersection');
+    % synchronize timetables by there intersection 
+    EEGAccelTobiiTimetable = synchronize(EEGAccelTimetable, TobiiTimetable, ...
+        'intersection');
 
-    %% SAVE SYNCHRONIZED TIMETABLE
-
-    % check if proper folder for storing timetables exists, if not create it
-    if ~exist(strcat('objects/', pathID, '_Synchronized/'), 'dir')
-        mkdir(strcat('objects/', pathID, '_Synchronized/'))
+    try 
+        % change timesteps in synchronized timetable to 2 milliseconds
+        EEGAccelTobiiTimetable = retime(EEGAccelTobiiTimetable, 'regular',  ...
+            'mean', 'TimeStep', 4*dt);
+    catch
+        disp('----Timetables do not overlap----')
     end
 
+    %% SAVE SYNCHRONIZED TIMETABLE
+    
+    % check if proper folder for storing timetables exists, if not create it
+    if ~exist(strcat('objects/', pathID, '/_Synchronized/'), 'dir')
+        mkdir(strcat('objects/', pathID, '/_Synchronized/'))
+    end
+    
     % save timetables
-    save(strcat('objects/', pathID, '_Synchronized/', ID,...
-        'Synchronized_EEGAccelTobiiTimetable'), 'EEGAccelTobiiTimetable');
+    save(strcat('objects/', pathID, '/_Synchronized/', ID,...
+        '_Synchronized_EEGAccelTobiiTimetable'), 'EEGAccelTobiiTimetable');
+    
 end

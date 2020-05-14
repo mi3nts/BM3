@@ -12,6 +12,9 @@
 %     8. MOVING VARIANCE OF PUPIL CENTER DISTANCE IN 3D IN 1 SECOND WINDOW
 %     9. MOVING REPRESENTATIVENESS OF PUPIL CENTER DISTANCE IN 3D IN 1 
 %        SECOND WINDOW
+%     10. LEFT PUPIL AREA
+%     11. RIGHT PUPIL AREA
+%     12. PUPIL AREA DIFFERENCE
     
 
 % THE UNIVERSITY OF TEXAS AT DALLAS
@@ -29,4 +32,7 @@ function newTobiiTimetable = getPDAllVars(oldTobiiTimetable)
     % get X,Y,Z pupil center ditance, 3D pupil center distance, and 3D
     % pupil center distance moving average, moving variance, and moving
     % representativeness (standard deviation) in 1 second window
-    newTobiiTimetable = getPCDistance(oldTobiiTimetable);
+    oldTobiiTimetable = getPCDistance(oldTobiiTimetable);
+    
+    % get left and right pupil area and pupil area difference
+    newTobiiTimetable = getPupilArea(oldTobiiTimetable);

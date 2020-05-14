@@ -87,17 +87,30 @@ function[] = EEGRead(YEAR, MONTH, DAY, TRIAL, USER, EEG)
     accelNames = {'AccelX' 'AccelY' 'AccelZ'};
 
     % if mobile-128 is unteathered acceleration channels will be 64 65 and 66
-    % if 128 is teathered to AIM then accel channels will be 72 73 74
+    % if 128 is teathered to AIM then accel channels will be 77 78 79
+    % if there was an improper tether accel channels will be 72 73 74
+    
+    % untethered case
     try
         AccelEEG = pop_select( EEG, 'channel',{'ACC64' 'ACC65' 'ACC66'});
     catch
-        AccelEEG = pop_select( EEG, 'channel',{'ACC77' 'ACC78' 'ACC79'});
         tetherSwitch = 1;
+    end
+    
+    if tetherSwitch
+        % tethered cases
+        try
+            AccelEEG = pop_select( EEG, 'channel',{'ACC77' 'ACC78' 'ACC79'});
+
+        catch
+            AccelEEG = pop_select( EEG, 'channel',{'ACC72' 'ACC73' 'ACC74'});
+            tetherSwitch = 0;
+            disp('----warning: bad tether----')
+        end
     end
 
     AccelEEG.setname= 'AccelEEG';
 
-    
     % create structure with only Auxilliary inputs 
     auxNames = {'PacketCounter' 'TRIGGER'};
 
@@ -119,7 +132,7 @@ function[] = EEGRead(YEAR, MONTH, DAY, TRIAL, USER, EEG)
     % -------------------------------------------------------------------------
     % create vector with timestamps in milliseconds since start of collection
     mstime = milliseconds(EEG64.times);
-
+    
     % create table with actual time stamp
     datetimes = array2table((start_date + start_time + mstime)',...
         'VariableNames', "Datetime");

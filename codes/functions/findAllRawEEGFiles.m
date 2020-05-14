@@ -18,7 +18,7 @@ function fileIDs = findAllRawEEGFiles(EEG)
     %% GET LIST OF FILENAMES
 
     % define filename from EEG ID
-    rawFileName = strcat(EEG, strcat(EEG,'.eeg'));
+    rawFileName = strcat(EEG,'.eeg');
 
     % get current path
     rootdir = pwd;
@@ -39,7 +39,6 @@ function fileIDs = findAllRawEEGFiles(EEG)
 
     % strip any trailing or leading periods
     fileIDs = strip(fileIDs,'.');
-
     %% CHANGE TO OBJECTS FOLDER BACK TO BM3
 
     cd ..

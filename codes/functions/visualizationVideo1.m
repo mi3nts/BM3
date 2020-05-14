@@ -49,6 +49,12 @@ function [] = visualizationVideo1(YEAR, MONTH, DAY, TRIAL, USER, ...
     % load synchronized EEGAccelTobiiTimetable
     load(strcat('objects/',pathID, '/_Synchronized/', ID, ...
         '_Synchronized_EEGAccelTobiiTimetable.mat'));
+    
+    % if synchronized timetable is empty exit function
+    if height(EEGAccelTobiiTimetable) == 0
+        return
+    end
+    
     % load Tobii Timetable
     load(strcat('objects/',pathID, '/', Tobii, '/', ...
         ID, '_', Tobii,'_TobiiTimetable.mat'));
@@ -66,9 +72,31 @@ function [] = visualizationVideo1(YEAR, MONTH, DAY, TRIAL, USER, ...
     clear EEGps
     %% SETUP TOBII PRO GLASSES VIDEO 
 
-    % read video
-    v = VideoReader(strcat('raw/',pathID, '/', Tobii, '/', ...
-        ID, '_', Tobii, '/segments/1/fullstream.mp4'));
+    % define path to tobii pov video
+    inputPath = strcat('raw/',pathID, '/', Tobii, '/', ...
+            ID, '_', Tobii, '/segments/1/');
+
+    % if running on Linux system use .avi format
+    if strcmp(computer, 'GLNXA64')
+
+        % check if .avi video exists
+        if ~exist(strcat(inputPath,'fullstream.avi'), 'file')
+
+            % if it does not, convert mp4 to avi
+            TobiiMp4ToAvi(inputPath);
+
+        end
+
+        % read video
+        v = VideoReader(strcat(inputPath,'fullstream.avi'));
+
+    % if running on MAC or Windows system use .mp4 format
+    else
+        % read video
+        v = VideoReader(strcat('raw/',pathID, '/', Tobii, '/', ...
+            ID, '_', Tobii, '/segments/1/fullstream.mp4'));
+    end
+
 
     % get start time of entire dataset
     tobiiStartTime = seconds(EEGAccelTobiiTimetable.Properties.StartTime - ...
@@ -188,7 +216,7 @@ function [] = visualizationVideo1(YEAR, MONTH, DAY, TRIAL, USER, ...
 
         % update HR plot
         subplot(6, 7, hrPos)
-        visualizeHR(EEGAccelTobiiTimetable, i, cmap);
+        visualizeHR(EEGAccelTobiiTimetable, i, []);
 
         % update PD visualization
         subplot(6, 7, pdPos)
@@ -228,4 +256,3 @@ function [] = visualizationVideo1(YEAR, MONTH, DAY, TRIAL, USER, ...
 
     % close video
     close(writerObj)
-

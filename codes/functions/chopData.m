@@ -15,8 +15,8 @@
 
 function choppedArray = chopData(InputArray, X)
 
-meanOfInput  = mean(InputArray);
-sd = std(InputArray);
+meanOfInput  = nanmean(InputArray);
+sd = nanstd(InputArray);
 
 % find records with in 2 standard deviations
 iwantXsigma = find(InputArray > meanOfInput - X*sd &...

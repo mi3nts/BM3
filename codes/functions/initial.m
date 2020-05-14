@@ -1,4 +1,4 @@
-% FUNCTION TO INITIALIZE NEW BIOMETRIC DATA INTO DIRECTORY STUCTURE. CODE READS
+% FUNCTION TO INITIALIZE NEW BIOMETRIC DATA INTO DIRECTORY STRUCTURE. CODE READS
 % ALL FOLDERS IN _newData FOLDER AND CREATES/PUTS IT IN THE PROPER
 % DIRECTORY AND CREATES DIRECTORY FOR ANY FUTURE DATA OBJECTS
 
@@ -7,7 +7,7 @@
 % MULTI-INTEGRATED REMOTE SENSING AND SIMULATION (MINTS)
 % -------------------------------------------------------------------------
 
-function[] = initial()
+function [] = initial()
     % change directory to home directory if not already in it
     temp  = split(pwd,'/');
     if ~strcmp(temp(end),'BM3')

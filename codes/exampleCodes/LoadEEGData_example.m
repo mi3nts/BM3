@@ -25,14 +25,14 @@ homeDir
 % using the Cognionics Mobile-128, the following data files are required: a
 % .eeg file, .vhdr file, and .vmrk file. These files should be stored in a
 % single folder with a name corresponding to the data's ID. The ID for a
-% dataset is a unique identifer that is heavily utilized by the BM library 
-% to access data saved within the BM directory stucture. The format for a
+% dataset is a unique identifier that is heavily utilized by the BM library 
+% to access data saved within the BM directory structure. The format for a
 % EEG dataset's ID is the following: YYYY_MM_DD_TXX_UXXX_EEGXX_, where YYYY
 % is the year the data was recorded, MM the month, and DD is the day. Here,
 % the X's following T, U, and EEG are integers that correspond to the 
 % dataset's trial number, user number, and EEG system number, respectively.
 
-% Example raw data can be found in the "codes/exampleCodes/resources" 
+% Example raw data can be found in the "codes/exampleCodes/_resources" 
 % directory. Copy the "2019_12_5_T03_U010_EEG01" folder in this directory,
 % and drop it into the "raw/_newData" directory.
 
@@ -47,13 +47,13 @@ initial
 % The "initial" function saved the EEG dataset to a directory corresponding
 % to its ID, in other words, "raw/YYYY/MM/DD/TXX/UXXX/EEGXX/". Typically it
 % is not necessary to manually navigate through the BM directories to
-% access data. If you know the ID of the dataset you are intersted in, you
+% access data. If you know the ID of the dataset you are interested in, you
 % have everything you need access and work with your dataset.
 
 % Let's define an ID for a dataset
 ID = '2019_12_5_T03_U010_EEG01_';
 
-% This ID references data recorded on December 12th, 2019. It is trial 3 of
+% This ID references data recorded on December 5th, 2019. It is trial 3 of
 % the experiment, the user ID is U010, and the ID of EEG system used is
 % EEG01
 
@@ -94,4 +94,4 @@ EEGRead(YEAR, MONTH, DAY, TRIAL, USER, DEVICE)
 % can only return that object.
 
 % call LoadTimetable() function, but only return timetable
-Timetable = LoadTimetable(YEAR, MONTH, DAY,TRIAL, USER, DEVICE);
+Timetable = LoadTimetable(YEAR, MONTH, DAY, TRIAL, USER, DEVICE);

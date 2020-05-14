@@ -18,7 +18,7 @@ idcs = strfind(pwd,filesep);
 
 if idx ~= -1
     % change directory to BM3
-    eval(strcat("cd ", (str(1:idcs(end-idx)))))
+    eval(strcat("cd ", "'",(str(1:idcs(end-idx))), "'"))
 end
 
 % add functions folder to path

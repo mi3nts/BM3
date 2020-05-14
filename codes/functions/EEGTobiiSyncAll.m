@@ -6,12 +6,13 @@
 %     Tobii = STRING. EX: 'Tobii01'
 %     NumberOfWorkers = INTEGER. EX: 2. 
 %                       NOTE: USE [] IF PARALLEL IS NOT DESIRED
+%     overwrite = 0 OR 1. WHERE, 1 = OVERWRITE EXISTING TIMETABLE
 
 % CODE AUTHORED BY: SHAWHIN TALEBI
 % THE UNIVERSITY OF TEXAS AT DALLAS
 % MULTI-INTEGRATED REMOTE SENSING AND SIMULATION (MINTS)
 
-function [] = EEGTobiiSyncAll(EEG, Tobii, NumberOfWorkers)
+function [] = EEGTobiiSyncAll(EEG, Tobii, NumberOfWorkers, overwrite)
 
     %% GET FILE IDS OF TIMETABLES TO SYNCHRONIZE
 
@@ -41,17 +42,27 @@ function [] = EEGTobiiSyncAll(EEG, Tobii, NumberOfWorkers)
             file = strcat('objects/',pathID, '/_Synchronized/',...
                 ID, '_Synchronized_EEGAccelTobiiTimetable.mat'); 
 
-            % if synchronized timetable already exists go to next fileID
-            if exist(file, 'file')
-                disp(strcat(fileIDs(i), " already exists"));
+            % if synchronized timetable does not exist or overwrite is on 
+            % make it
+            if ~exist(file, 'file') || overwrite == 1
+                
+                try
+                % synchronize timetables
+                EEGTobiiSync(YEAR, MONTH, DAY, TRIAL, USER, EEG, Tobii)
+                catch
+                    disp('----error syncing----')
+                end
+
+                % print trial is complete
+                disp(strcat(fileIDs(i), " is complete"));
+                
                 continue
             end
 
-            % synchronize timetables
-            EEGTobiiSync(YEAR, MONTH, DAY, TRIAL, USER, EEG, Tobii)
-
-            % print trial is complete
-            disp(strcat(fileIDs(i), " is complete"));
+            % timetable already exists
+            disp(strcat(fileIDs(i), " already exists"));
+            
+            
 
         end
 
@@ -73,16 +84,20 @@ function [] = EEGTobiiSyncAll(EEG, Tobii, NumberOfWorkers)
             file = strcat('objects/',pathID, '/_Synchronized/',...
                 ID, '_Synchronized_EEGAccelTobiiTimetable.mat'); 
 
-            % if synchronized timetable already exists go to next fileID
-            if exist(file, 'file')
+            % if synchronized timetable does not exist or overwrite is on 
+            % make timetable            
+            if ~exist(file, 'file') || overwrite == 1
+                % synchronize timetables
+                EEGTobiiSync(YEAR, MONTH, DAY, TRIAL, USER, EEG, Tobii)
+
+                % print trial is complete
+                disp(strcat(fileIDs(i), " is complete"));
+                
                 continue
             end
 
-            % synchronize timetables
-            EEGTobiiSync(YEAR, MONTH, DAY, TRIAL, USER, EEG, Tobii)
-
-            % print trial is complete
-            disp(strcat(fileIDs(i), " is complete"));
+            % timetable already exists
+            disp(strcat(fileIDs(i), " already exists"));
 
         end
 

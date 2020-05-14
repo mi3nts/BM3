@@ -54,8 +54,10 @@ EEGdataPS_groupedByElectrodes = NaN(length(x), 16448);
 %% IF APPLICABLE USE PARFOR TO COMPUTE POWER SPECTRA
 
 if ~isempty(NumberOfWorkers)
-    % start parallel pool
-    poolobj = parpool(NumberOfWorkers);
+    % start parallel pool if none exists
+    if isempty(gcp('nocreate'))
+        poolobj = parpool(NumberOfWorkers);
+    end
 
     % center refers to the point in the middle of the segment
     parfor center = ceil(segmentL/2):(length(x)-segmentHalfL)
@@ -69,8 +71,9 @@ if ~isempty(NumberOfWorkers)
         EEGdataPS_groupedByElectrodes(center,:) = reshape(pxx, [1, 16448]);
 
     end
-    % delete parallel pool
-    delete(poolobj)
+    
+%     % delete parallel pool
+%     delete(poolobj)
 
     % generate array of frequency values if using parfor
     f = linspace(0, 250, 257);
