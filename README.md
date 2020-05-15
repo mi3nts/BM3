@@ -173,7 +173,7 @@ There are key words in BM3 function names, typically at the beginning or end, th
 
 * __Load__: Loads some data structure into the workspace. Example: LoadTimetable()
 
-* __visualize__: Creates some kind of visualization and saves it to the /visuals subdirectory. Example: visualizeHR().
+* __visualize__: Creates some kind of visualization. Example: visualizeHR().
 
 ## Reference
 
