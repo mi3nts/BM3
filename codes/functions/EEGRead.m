@@ -70,7 +70,7 @@ function[] = EEGRead(YEAR, MONTH, DAY, TRIAL, USER, EEG)
     EEG.setname = 'FullEEG';
 
     % add channel locations
-    EEG=pop_chanedit(EEG, 'lookup','./backend/eeglab2019_0/plugins/dipfit/standard_BESA/standard-10-5-cap385.elp');
+    EEG=pop_chanedit(EEG, 'lookup','./backend/eeglab2019_1/plugins/dipfit/standard_BESA/standard-10-5-cap385.elp');
 
     % create structure with only EEG inputs
     electrodeNames = {'Fp1' 'Fp2' 'F3' 'F4' 'C3' 'C4' 'P3'...
