@@ -14,7 +14,7 @@ homeDir
 
 % define string inputs corresponding to desired dataset
 [YEAR, MONTH, DAY, TRIAL, USER, DEVICE] = ...
-    decodeID('2019_12_5_T05_U011_EEG01');
+    decodeID('2019_12_2_T03_U001_EEG01_');
 
 %% COMPUTE POWER SPECTRA AND SAVE TO FILE
 
