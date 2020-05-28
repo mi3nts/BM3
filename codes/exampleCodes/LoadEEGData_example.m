@@ -7,7 +7,7 @@ clear; close all; clc
 
 % CODE AUTHORED BY: SHAWHIN TALEBI
 % THE UNIVERSITY OF TEXAS AT DALLAS
-% MULTI-INTEGRATED REMOTE SENSING AND SIMULATION (MINTS)
+% MULTI-SCALE INTEGRATED REMOTE SENSING AND SIMULATION (MINTS)
 
 %% SET UP ENVIRONMENT
 % The first thing we need to do is navigate to the "home" directory of the
@@ -19,7 +19,7 @@ clear; close all; clc
 
 homeDir
 
-%% IMPORT DATA
+%% IMPORT RAW DATA
 % To start processing raw EEG data it is recommended to include all data
 % folders/files in the "raw/_newData" directory. For EEG data recorded 
 % using the Cognionics Mobile-128, the following data files are required: a
@@ -33,7 +33,7 @@ homeDir
 % dataset's trial number, user number, and EEG system number, respectively.
 
 % Example raw data can be found in the "codes/exampleCodes/_resources" 
-% directory. Copy the "2019_12_5_T03_U010_EEG01" folder in this directory,
+% directory. Copy the "2019_12_2_T03_U001_EEG01" folder in this directory,
 % and drop it into the "raw/_newData" directory.
 
 % Once all raw data folders are placed in the "raw/_newData" folder we 
@@ -51,10 +51,10 @@ initial
 % have everything you need access and work with your dataset.
 
 % Let's define an ID for a dataset
-ID = '2019_12_5_T03_U010_EEG01_';
+ID = '2019_12_2_T03_U001_EEG01_';
 
-% This ID references data recorded on December 5th, 2019. It is trial 3 of
-% the experiment, the user ID is U010, and the ID of EEG system used is
+% This ID references data recorded on December 2nd, 2019. It is trial 3 of
+% the experiment, the user ID is U001, and the ID of EEG system used is
 % EEG01
 
 % With our ID we can generate the following strings: YEAR, MONTH, DAY, 
