@@ -8,6 +8,11 @@ clear; close all; clc
 % MULTI-INTEGRATED REMOTE SENSING AND SIMULATION (MINTS)
 
 %% IMPORT FUNCTIONS AND CHANGE TO BM3 HOME DIRECTORY
+
+% NOTE: be sure to run the LoadEEGData_example to generate a timetable with 
+% EEG data before running this code!
+
+% call homeDir function
 homeDir
 
 %% DEFINE INPUTS PARAMETERS
