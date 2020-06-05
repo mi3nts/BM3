@@ -76,3 +76,5 @@ function Timetable = TobiiRemoveErrors(Timetable)
     Timetable.AccelerometerX(errorRows10) = NaN;
     Timetable.AccelerometerY(errorRows10) = NaN;
     Timetable.AccelerometerZ(errorRows10) = NaN;
+    
+    

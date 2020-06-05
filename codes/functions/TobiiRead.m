@@ -14,18 +14,12 @@
 
 % ------------------------------------------------------------------------- 
 function[] = TobiiRead(YEAR, MONTH, DAY, TRIAL, USER, Tobii)
-    % define ID number and pathID
-    ID = strcat(YEAR, '_', MONTH, '_',DAY, '_',TRIAL, '_',USER, '_', Tobii);
-    pathID = strrep(ID,'_','/');
-
-    % change directory to home directory if not already in it
-    temp  = split(pwd,'/');
-    if ~strcmp(temp(end),'BM3')
-         homeDir
-    end
 
     % change number format to long
     format long
+
+    % get ID and pathID
+    [ID, pathID] = makeIDs(YEAR, MONTH, DAY, TRIAL, USER, Tobii);
 
     % check if livedata.json file exists, if not uncompress it
     if ~exist(strcat('raw/', pathID,'/', ID,...
@@ -470,78 +464,54 @@ function[] = TobiiRead(YEAR, MONTH, DAY, TRIAL, USER, Tobii)
     Sync_Timetable = table2timetable(Sync_Table);
     API_Timetable = table2timetable(API_Table);
 
-    % retime timetables to coincide
-    LeftPupilCenter_Timetable = retime(LeftPupilCenter_Timetable,'regular'...
-        ,'linear','SampleRate', 100);
-    RightPupilCenter_Timetable = retime(RightPupilCenter_Timetable,'regular'...
-        ,'linear','SampleRate', 100);
-    LeftPupilDiameter_Timetable = retime(LeftPupilDiameter_Timetable,'regular'...
-        ,'linear','SampleRate', 100);
-    RightPupilDiameter_Timetable = retime(RightPupilDiameter_Timetable,'regular'...
-        ,'linear','SampleRate', 100);
-    LeftGazeDirection_Timetable = retime(LeftGazeDirection_Timetable,'regular'...
-        ,'linear','SampleRate', 100);
-    RightGazeDirection_Timetable = retime(RightGazeDirection_Timetable,'regular'...
-        ,'linear','SampleRate', 100);
-    GazePosition_Timetable = retime(GazePosition_Timetable,'regular'...
-        ,'linear','SampleRate', 100);
-    GazePosition3D_Timetable = retime(GazePosition3D_Timetable,'regular'...
-        ,'linear','SampleRate', 100);
-    Gyroscope_Timetable = retime(Gyroscope_Timetable,'regular'...
-        ,'linear','SampleRate', 100);
-    Accelerometer_Timetable = retime(Accelerometer_Timetable,'regular'...
-        ,'linear','SampleRate', 100);
+    % CREATE ARRAY OF TIMETABLE NAMES
+    timetables = ["LeftPupilCenter_Timetable" "RightPupilCenter_Timetable" ...
+        "LeftPupilDiameter_Timetable" "RightPupilDiameter_Timetable" ...
+        "LeftGazeDirection_Timetable" "RightGazeDirection_Timetable" ...
+        "GazePosition_Timetable" "GazePosition3D_Timetable" ...
+        "Gyroscope_Timetable" "Accelerometer_Timetable"...
+        "PTS_Timetable" "VTS_Timetable" "EVTS_Timetable" ...
+        "Sync_Timetable" "API_Timetable"];
+
+
+    % CHECK IF TIMETABLES HAVE DATA NaT, IF SO REPLACE WITH START DATETIME
+    for timetable = timetables
+        eval(strcat("bool = sum(isnat(",timetable,".Datetime));"));
+
+        % check if Datetime is not a time
+        if bool 
+            % if not a time replace it with data start datetime
+            eval(strcat(timetable, ".Datetime = start_date + start_time;"));
+        end
+
+    end
 
     % SYNCRONIZE TIMETABLES
 
-    % construct timetable of biometric measurements
+    % create timetable that with tobii data suitable for analysis
     TobiiTimetable = synchronize(...
         LeftPupilCenter_Timetable, RightPupilCenter_Timetable, ...
         LeftPupilDiameter_Timetable, RightPupilDiameter_Timetable, ...
         LeftGazeDirection_Timetable, RightGazeDirection_Timetable, ...
         GazePosition_Timetable, GazePosition3D_Timetable, ...
-        Gyroscope_Timetable, Accelerometer_Timetable, 'intersection');
+        Gyroscope_Timetable, Accelerometer_Timetable, ...
+        'regular','linear','TimeStep', milliseconds(10));
 
-    % -------------------------------------------------------------------------
-    % CREATE FINAL TIMETABLES
-    % -------------------------------------------------------------------------
-    TobiiTimetable = unique(TobiiTimetable);
+    % create timetable that with tobii data suitable for analysis
+    rawTobiiTimetable = synchronize(...
+        LeftPupilCenter_Timetable, RightPupilCenter_Timetable, ...
+        LeftPupilDiameter_Timetable, RightPupilDiameter_Timetable, ...
+        LeftGazeDirection_Timetable, RightGazeDirection_Timetable, ...
+        GazePosition_Timetable, GazePosition3D_Timetable, ...
+        Gyroscope_Timetable, Accelerometer_Timetable, ...
+        PTS_Timetable, VTS_Timetable, EVTS_Timetable, ...
+        Sync_Timetable, API_Timetable);
 
-    % construct timetable of auxiliary parameters that were measured during run
-    % build command
-    command = 'TobiiAuxTimetable = synchronize(';
-
-    if length(PTS_Timetable.Datetime) > 1 
-        command = [command 'PTS_Timetable, '];
-    end
-
-    if length(VTS_Timetable.Datetime) > 1 
-        command = [command 'VTS_Timetable, '];
-    end
-
-    if length(EVTS_Timetable.Datetime) > 1 
-        command = [command 'EVTS_Timetable, '];
-    end
-
-    if length(API_Timetable.Datetime) > 1
-        command = [command 'API_Timetable, '];
-    end
-
-    if length(Sync_Timetable.Datetime) > 1 
-        command = [command 'Sync_Timetable'];  
-    end
-
-    % evaluate command
-    if length(command) > 34
-        command = [command ');'];
-        eval(command)
-    end
-    
      % -------------------------------------------------------------------------
     % Remove values with errors
     % -------------------------------------------------------------------------
     TobiiTimetable = TobiiRemoveErrors(TobiiTimetable);
-    
+
     % -------------------------------------------------------------------------
     % Compute and append additional pupil and gaze variables
     % -------------------------------------------------------------------------
@@ -550,14 +520,14 @@ function[] = TobiiRead(YEAR, MONTH, DAY, TRIAL, USER, Tobii)
     % -------------------------------------------------------------------------
     % Save objects 
     % -------------------------------------------------------------------------
-    % save timetables
+    % create directory name for TobiiTimetable and TobiiTimetable
+    directory = strcat('objects/', pathID);
+    rawDirectory = strcat('raw/', pathID);
+
     % check if proper folder in tables exists, if not create it
-    if ~exist(strcat('objects/', pathID), 'dir')
-        mkdir(strcat('objects/', pathID))
-    end
+    createDir(directory)
+    createDir(rawDirectory)
 
     % save timetables
-    save(strcat('objects/', pathID,'/', ID,'_TobiiTimetable'),...
-        'TobiiTimetable');
-    save(strcat('objects/', pathID,'/', ID,'_TobiiAuxTimetable'),...
-        'TobiiAuxTimetable');
+    save(strcat(directory,'/', ID,'_TobiiTimetable'), 'TobiiTimetable');
+    save(strcat(rawDirectory,'/', ID,'_rawTobiiTimetable'), 'rawTobiiTimetable');

@@ -13,12 +13,23 @@
 
 function outTimetable = rmMetaVars(inTimetable)
 
+% remove non-eyetracking data
+notEyeTrackingVar = ["PresentationDatetime" "PipelineVersion" ...
+    "VideoDatetime" "EyeVideoTimestamp" "Direction" "Signal" ...
+    "EventDatetime" "Type" "Tag"];
+
 % intialize array to hold indicies of meta-variables columns
 rmVars = [];
 
 % get indicues of meta-variable columns
 for i=1:length(inTimetable.Properties.VariableNames)
+    
     varName = char(inTimetable.Properties.VariableNames(i));
+    
+    if sum(varName == notEyeTrackingVar)
+        rmVars = [rmVars; i];
+        continue 
+    end
    
     if length(varName) <= 3
         continue

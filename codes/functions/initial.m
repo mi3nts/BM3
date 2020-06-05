@@ -54,7 +54,10 @@ function [] = initial()
         % objects, if not make it
         if ~exist(strcat('objects/',pathID(1:19),'/_Synchronized'), 'dir')
             mkdir(strcat('objects/',pathID(1:19),'/_Synchronized'))
-        end    
+        end   
+        
+        % initialize biometric dataset for dataset
+        initialDS(ID)
     end
     
 end

@@ -1,8 +1,8 @@
-% CODE TO CHANGE PATH TO HOME DIRECTORY FOR BM3 FILE STRUCTURE
+% FUNCTION TO CHANGE PATH TO HOME DIRECTORY FOR BM3 FILE STRUCTURE
 
 % CODE AUTHORED BY: SHAWHIN TALEBI
 % THE UNIVERSITY OF TEXAS AT DALLAS
-% MULTI-INTEGRATED REMOTE SENSING AND SIMULATION (MINTS)
+% MULTI-SCALE INTEGRATED REMOTE SENSING AND SIMULATION (MINTS)
 
 function [] = homeDir()
 
@@ -18,8 +18,10 @@ idcs = strfind(pwd,filesep);
 
 if idx ~= -1
     % change directory to BM3
-    eval(strcat("cd ", (str(1:idcs(end-idx)))))
+    eval(strcat("cd ", "'",(str(1:idcs(end-idx))), "'"))
 end
 
 % add functions folder to path
 addpath('./codes/functions/')
+% add functions folder to path
+addpath('./backend/prettyVariableNames/')

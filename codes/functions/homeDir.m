@@ -2,7 +2,7 @@
 
 % CODE AUTHORED BY: SHAWHIN TALEBI
 % THE UNIVERSITY OF TEXAS AT DALLAS
-% MULTI-INTEGRATED REMOTE SENSING AND SIMULATION (MINTS)
+% MULTI-SCALE INTEGRATED REMOTE SENSING AND SIMULATION (MINTS)
 
 function [] = homeDir()
 
@@ -23,3 +23,5 @@ end
 
 % add functions folder to path
 addpath('./codes/functions/')
+% add functions folder to path
+addpath('./backend/prettyVariableNames/')

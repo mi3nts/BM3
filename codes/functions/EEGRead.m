@@ -157,6 +157,7 @@ function[] = EEGRead(YEAR, MONTH, DAY, TRIAL, USER, EEG)
         AIMTable = [datetimes ...
             array2table(AIMEEG.data', 'VariableNames', AIMNames)];
     end
+    
     % find off axis electrodes (excluding Tp10)
     idx = [];
     for i = 1:length(electrodeNames)-1

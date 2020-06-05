@@ -22,6 +22,6 @@ sd = nanstd(InputArray);
 iwantXsigma = find(InputArray > meanOfInput - X*sd &...
     InputArray < meanOfInput + X*sd);
 
-% save chopped data in array
+% store chopped data in array
 choppedArray = NaN(size(InputArray));
 choppedArray(iwantXsigma) = InputArray(iwantXsigma);
