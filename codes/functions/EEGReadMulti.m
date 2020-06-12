@@ -34,7 +34,7 @@ if sum(diff(TrialNumbers)==ones(1, length(TrialNumbers)-1))...
     parfor i=TrialNumbers
         
         % define trial name
-        if i<9
+        if i<=9
             TRIAL = char(strcat('T0', string(i)));
         else
             TRIAL = char(strcat('T', string(i)));
@@ -44,7 +44,7 @@ if sum(diff(TrialNumbers)==ones(1, length(TrialNumbers)-1))...
         EEGRead(YEAR, MONTH, DAY, TRIAL, USER, EEG)
         
         % display which trial was read
-        disp(strcat("Trial ", string(i), " complete"))
+        disp(strcat("---Trial ", string(i), " complete---"))
 
     end
   

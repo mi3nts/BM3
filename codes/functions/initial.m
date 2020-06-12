@@ -4,7 +4,7 @@
 
 % CODE AUTHORED BY: SHAWHIN TALEBI
 % THE UNIVERSITY OF TEXAS AT DALLAS
-% MULTI-INTEGRATED REMOTE SENSING AND SIMULATION (MINTS)
+% MULTI-SCALE INTEGRATED REMOTE SENSING AND SIMULATION (MINTS)
 % -------------------------------------------------------------------------
 
 function [] = initial()
@@ -42,8 +42,12 @@ function [] = initial()
         end
 
         % move folder to proper directory
-        eval(strcat("movefile ", strcat('raw/_newData/',ID, " "), ...
-            strcat('raw/',pathID)));
+        try
+            eval(strcat("movefile ", strcat('raw/_newData/',ID, " "), ...
+                strcat('raw/',pathID)));
+        catch
+            disp(strcat("data already exist for ",ID))
+        end
 
         % check if folder corresponding to ID exists for data objects, if not make it
         if ~exist(strcat('objects/',pathID), 'dir')

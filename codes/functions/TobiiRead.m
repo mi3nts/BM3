@@ -515,7 +515,7 @@ function[] = TobiiRead(YEAR, MONTH, DAY, TRIAL, USER, Tobii)
     % -------------------------------------------------------------------------
     % Compute and append additional pupil and gaze variables
     % -------------------------------------------------------------------------
-    TobiiTimetable = getPDAllVars(TobiiTimetable);
+    TobiiTimetable = getAllTobiiVars(TobiiTimetable);
 
     % -------------------------------------------------------------------------
     % Save objects 

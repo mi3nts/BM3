@@ -15,13 +15,14 @@
 %     10. LEFT PUPIL AREA
 %     11. RIGHT PUPIL AREA
 %     12. PUPIL AREA DIFFERENCE
+%     13. FIXATION FLAGS
     
 
 % THE UNIVERSITY OF TEXAS AT DALLAS
 % MULTI-INTEGRATED REMOTE SENSING AND SIMULATION (MINTS)
 % CODE AUTHORED BY: SHAWHIN TALEBI
 
-function newTobiiTimetable = getPDAllVars(oldTobiiTimetable)
+function newTobiiTimetable = getAllTobiiVars(oldTobiiTimetable)
 
     % get average pupil diameter 
     oldTobiiTimetable = getPDAverage(oldTobiiTimetable);
@@ -35,4 +36,7 @@ function newTobiiTimetable = getPDAllVars(oldTobiiTimetable)
     oldTobiiTimetable = getPCDistance(oldTobiiTimetable);
     
     % get left and right pupil area and pupil area difference
-    newTobiiTimetable = getPupilArea(oldTobiiTimetable);
+    oldTobiiTimetable = getPupilArea(oldTobiiTimetable);
+    
+    % get fixation flags
+    newTobiiTimetable = getFixationFlags(oldTobiiTimetable);

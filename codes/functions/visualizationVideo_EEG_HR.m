@@ -3,15 +3,8 @@
 % FUNCTION:
 
 %     1. TOBII PRO GLASSES POV VIDEO
-%     2. BAR PLOT OF REPRESENTATIVENESS OF THE DISTANCE BETWEEN PUPILS 
-%     (VERGENCE VARIATION)
-%     3. BAR PLOT OF DISTANCE BETWEEN PUPIL CENTERS
-%     4. BAR PLOT OF DIFFERENCE PUPIL DIAMETER SIZE
-%     5. BAR PLOT OF HR
-%     6. HEAT MAP OF POWER OVER TIME OF ALPHA BAND
-%     7. MOVING PUPIL VISUALIZATION
-%     8. SOM CLASSES PLOTTED OVER TIME
-%     9. VARIATION IN SOM CLASS
+%     2. BAR PLOT OF HR
+%     3. HEAT MAP OF POWER OVER TIME OF ALPHA BAND
 
 % INPUTS:
 
@@ -22,8 +15,6 @@
 %     USER = STRING. USER ID OF DATA. EX: 'U010'
 %     EEG = STRING. EEG ID OF DATA. EX: 'EEG01'
 %     Tobii = STRING. Tobii ID OF DATA. EX: 'Tobii01'
-%     iSOM = INTEGER. NUMBER OF ROWS IN SOM GEOMETRY
-%     jSOM = INTEGER. NUMBER OF COLUMNS IN SOM GEOMETRY
 
 % OUTPUTS:
 % 
@@ -35,9 +26,8 @@
 % THE UNIVERSITY OF TEXAS AT DALLAS
 % MULTI-SCALE INTEGRATED REMOTE SENSING AND SIMULATION (MINTS)
 
-function [] = visualizationVideo1(YEAR, MONTH, DAY, TRIAL, USER, ...
-    EEG, Tobii, iSOM, jSOM)
-
+function [] = visualizationVideo_EEG_HR(YEAR, MONTH, DAY, TRIAL, USER, ...
+    EEG, Tobii)
     %% LOAD DATA
 
     % add eeglab functions
@@ -45,6 +35,8 @@ function [] = visualizationVideo1(YEAR, MONTH, DAY, TRIAL, USER, ...
 
     % get dataset ID and pathID
     [ID, pathID] = makeIDs(YEAR, MONTH, DAY, TRIAL, USER, []);
+    
+    disp(strcat("starting ", ID, "..."));
 
     % load synchronized EEGAccelTobiiTimetable
     load(strcat('objects/',pathID, '/_Synchronized/', ID, ...
@@ -98,7 +90,6 @@ function [] = visualizationVideo1(YEAR, MONTH, DAY, TRIAL, USER, ...
             ID, '_', Tobii, '/segments/1/fullstream.mp4'));
     end
 
-
     % get start time of entire dataset
     tobiiStartTime = seconds(EEGAccelTobiiTimetable.Properties.StartTime - ...
         TobiiTimetable.Properties.StartTime);
@@ -106,32 +97,10 @@ function [] = visualizationVideo1(YEAR, MONTH, DAY, TRIAL, USER, ...
 
     % clear unnecessary variables from workspace
     clear TobiiTimetable
-    %% GET SOM CLASSES
-
-    % create variable to check whether SOM Classes are provided in Table
-    hasSOMClasses = ...
-        sum(strcmp(EEGAccelTobiiTimetable.Properties.VariableNames, 'Class'));
-
-    if ~hasSOMClasses
-        % create timetable with SOM classes at each timestep
-        SOMTimetable = performSOM(EEGAccelTobiiTimetable, iSOM, jSOM); 
-        EEGAccelTobiiTimetable.Class = SOMTimetable.Class;
-    end
+    %% GET SAMPLE RATE
 
     % get sample rate of biometric data
     dataSampleRate = EEGAccelTobiiTimetable.Properties.SampleRate;
-
-    % get SOM class variability
-    [~,~,somMovingRepresentativeness] = ...
-        timeseries_moving_average(EEGAccelTobiiTimetable.Datetime, ...
-        EEGAccelTobiiTimetable.Class, ...
-        seconds(1), 0);
-
-    clear SOMTimetable
-    %% INTERPOLATE PUPIL METRICS
-
-    % perform interpolation over NaN values for tobii variables
-    EEGAccelTobiiTimetable = interpolTobiiNaNs(EEGAccelTobiiTimetable);
 
     %% SET UP FIGURE
 
@@ -142,37 +111,13 @@ function [] = visualizationVideo1(YEAR, MONTH, DAY, TRIAL, USER, ...
 
     %% DEFINE SUBPLOT RANGES FOR EACH VISUALIZATION
 
-    % for 6 by 7
-    videoPos = [1 2 3 8 9 10];
-    pdPos = [18:20 25:27];
-    pddPos = [6 13];
-    pcdPos = [5 12];
-    pcd_sdPos = [4 11];
-    alphaPos = [15:17 22:24];
-    hrPos = [7 14 21 28];
-    somPos = [29:34 36:41];
-    somVarPos = [35 42];
-
-    %% PLOT SOM CLASSES OVER TIME
-
-    % define maximum class value
-    y = max(EEGAccelTobiiTimetable.Class) + round(0.1*max(EEGAccelTobiiTimetable.Class));
-
-    % plot class time series
-    subplot(6, 7, somPos)
-    plot(EEGAccelTobiiTimetable.Datetime, EEGAccelTobiiTimetable.Class)
-    title('SOM Classes Over Time', 'FontSize', 20)
-    hold on
-    % initilize time mark time
-    plot(EEGAccelTobiiTimetable.Datetime([1 1]),[0 y])
-
+    videoPosition = [1:5 8:12 15:19];
+    alphaPosition = [22:26 29:33];
+    hrPosition = [6 7 13 14 20 21 34 35];
     %% RUN VISUALIZATION
 
     % define number of records
     numRecords = max(size(alphaBand));
-
-    % define colormap for HR plot
-    cmap = colormap(hot);
 
     % define directory to save video
     directory = strcat('visuals/', pathID,'/videos/');
@@ -183,8 +128,7 @@ function [] = visualizationVideo1(YEAR, MONTH, DAY, TRIAL, USER, ...
     % set up writer object to record plot 
     % NOTE: input must be char array!
     writerObj = VideoWriter(char(...
-        strcat(directory, ID,'_video_vergence_movingPD_EEGps_HR_SOM', ...
-        string(iSOM), 'by', string(jSOM),'.avi')));
+        strcat(directory, ID,'_video_EEGps_HR.avi')));
 
     % set frame rate of Tobii POV video
     writerObj.FrameRate = v.FrameRate;
@@ -194,49 +138,18 @@ function [] = visualizationVideo1(YEAR, MONTH, DAY, TRIAL, USER, ...
     for i = 1:round(dataSampleRate/v.FrameRate):numRecords
 
         % update video
-        subplot(6, 7, videoPos)
+        subplot(5, 7, videoPosition)
         videoAxes = gca;
         vidFrame = readFrame(v);
         im = image(vidFrame, 'Parent', videoAxes);
         videoAxes.Visible = 'off';
 
-        % update SOM time series
-        subplot(6, 7, somPos)
-        % get current axis
-        ax = gca;    
-        % delete old time mark line
-        delete(ax.Children(1))
-        % plot new time mark line
-        plot(EEGAccelTobiiTimetable.Datetime([i i]),[0 y], ...
-            'r--', 'LineWidth', 1);
-
-        % update SOM variability plot
-        subplot(6,7,somVarPos)
-        visualizeBar(somMovingRepresentativeness, i, colormap(jet), ...
-            'SOM Class Variability');
-
         % update HR plot
-        subplot(6, 7, hrPos)
+        subplot(5, 7, hrPosition)
         visualizeHR(EEGAccelTobiiTimetable, i, []);
 
-        % update PD visualization
-        subplot(6, 7, pdPos)
-        visualizePD(EEGAccelTobiiTimetable, i);
-
-        % update PDD visualization
-        subplot(6, 7, pddPos)
-        visualizePDD(EEGAccelTobiiTimetable, i, colormap(jet));
-
-        % update PCD visualization
-        subplot(6, 7, pcdPos)
-        visualizePCD(EEGAccelTobiiTimetable, i, colormap(jet));
-
-         % update PCD_SD visualization
-        subplot(6, 7, pcd_sdPos)
-        visualizePCD_SD(EEGAccelTobiiTimetable, i, colormap(jet));
-
         % update EEG PS
-        subplot(6, 7, alphaPos)
+        subplot(5, 7, alphaPosition)
         % clear old topoplot
         cla('reset')
         if ~isnan(alphaBand(i,1))
@@ -257,3 +170,5 @@ function [] = visualizationVideo1(YEAR, MONTH, DAY, TRIAL, USER, ...
 
     % close video
     close(writerObj)
+    
+    disp(strcat("finished ", ID, "."));

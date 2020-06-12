@@ -24,11 +24,11 @@ function [] = EEGTobiiSync(YEAR, MONTH, DAY, TRIAL, USER, EEG, Tobii)
     TobiiTimetable = LoadTimetable(YEAR, MONTH, DAY, TRIAL, USER, Tobii);
     %% TIME OFFSET FROM CROSS CORRELATION
 
-    % compute time offset
-    offset = computeTimeOffset(TobiiTimetable, EEGAccelTimetable);
-
-    % add offset to tobii timetable 
-    TobiiTimetable.Datetime = TobiiTimetable.Datetime + offset;
+%     % compute time offset
+%     offset = computeTimeOffset(TobiiTimetable, EEGAccelTimetable);
+% 
+%     % add offset to tobii timetable 
+%     TobiiTimetable.Datetime = TobiiTimetable.Datetime + offset;
     %% RESAMPLE TIMETABLES
 
     % define timestep of 0.5 millisecond
