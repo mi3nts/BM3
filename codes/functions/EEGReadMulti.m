@@ -57,7 +57,7 @@ else
     for i=TrialNumbers
 
         % define trial name
-        if i<9
+        if i<=9
             TRIAL = strcat('T0', string(i));
         else
             TRIAL = strcat('T', string(i));
@@ -67,7 +67,7 @@ else
         EEGRead(YEAR, MONTH, DAY, TRIAL, USER, EEG)
 
         % display which trial was read
-        disp(strcat("Trial ", string(i), " complete"))
+        disp(strcat("---Trial ", string(i), " complete---"))
 
     end
 
