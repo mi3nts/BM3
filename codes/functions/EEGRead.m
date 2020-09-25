@@ -199,6 +199,21 @@ function[] = EEGRead(YEAR, MONTH, DAY, TRIAL, USER, EEG)
 
     % create timetable of all data
     EEGAccelTimetable = table2timetable(EEGAccelTable);
+        
+    % add additional biometrics
+    if tetherSwitch
+        
+        % GSR in microsiemens
+        EEGAccelTimetable = getGSR(EEGAccelTimetable);
+        % core temperature in celsius
+        EEGAccelTimetable = getCoreTemp(EEGAccelTimetable, 'HR');
+        % detect r peaks and inter r wave intervals
+        EEGAccelTimetable = getRpeaks(EEGAccelTimetable, 'EEG');
+        % 4 different heart rate variability measures
+        EEGAccelTimetable = getHRV(EEGAccelTimetable, 'rpeaks', 1);
+
+        
+    end
 
     %% -------------------------------------------------------------------------
     % SAVE objects

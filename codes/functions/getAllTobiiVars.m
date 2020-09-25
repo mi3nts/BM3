@@ -15,7 +15,8 @@
 %     10. LEFT PUPIL AREA
 %     11. RIGHT PUPIL AREA
 %     12. PUPIL AREA DIFFERENCE
-%     13. FIXATION FLAGS
+%     13. FIXATION FLAGS BASED ON I-VT (VELOCITY THRESHOLD) ALGORITHM
+%     14. BLINK FLAGS BASED ON TOBII RECOMMENDED ALGORITHM
     
 
 % THE UNIVERSITY OF TEXAS AT DALLAS
@@ -39,4 +40,7 @@ function newTobiiTimetable = getAllTobiiVars(oldTobiiTimetable)
     oldTobiiTimetable = getPupilArea(oldTobiiTimetable);
     
     % get fixation flags
-    newTobiiTimetable = getFixationFlags(oldTobiiTimetable);
+    oldTobiiTimetable = getFixationFlags(oldTobiiTimetable);
+    
+    % get blink flags
+    newTobiiTimetable = getBlinkFlags(oldTobiiTimetable);

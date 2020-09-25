@@ -39,6 +39,11 @@ elseif strcmp(DEVICE(1:3), 'EEG')
     TTname = 'EEGAccelTimetable';
     ID = strcat(ID, '_', TTname);
     
+elseif strcmp(DEVICE(1:3), 'EQV')
+
+    TTname = 'EQVTimetable';
+    ID = strcat(ID, '_', TTname);
+    
 elseif strcmp(DEVICE(1:5), 'Tobii')
     
     TTname = 'TobiiTimetable';

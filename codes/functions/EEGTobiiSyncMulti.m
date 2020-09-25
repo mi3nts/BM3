@@ -35,7 +35,7 @@ if sum(diff(TrialNumbers)==ones(1, length(TrialNumbers)-1))...
     parfor i=TrialNumbers
         
         % define trial name
-        if i<9
+        if i<=9
             TRIAL = strcat('T0', string(i));
         else
             TRIAL = strcat('T', string(i));
@@ -60,7 +60,7 @@ else
     for i=TrialNumbers
 
         % define trial name
-        if i<9
+        if i<=9
             TRIAL = strcat('T0', string(i));
         else
             TRIAL = strcat('T', string(i));

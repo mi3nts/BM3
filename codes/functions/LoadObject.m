@@ -12,7 +12,7 @@
 %         IN DESIRED OBJECT.
 %     ObjectName = STRING. NAME THAT CORRESPONDS TO THE DATA INCLUDED IN 
 %         OBJCET
-%         EXAMPLES: 'EEGAccelTimetable', 'EEGPowerSpectra',
+%         EXAMPLES: 'EEGAccelTimetable', 'EEGps',
 %         'TobiiTimetable'
 
 

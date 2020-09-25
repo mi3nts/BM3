@@ -81,6 +81,9 @@ function[] = AIMread(YEAR, MONTH, DAY, TRIAL, USER, AIM)
     % -------------------------------------------------------------------------
     % create timetable of EEG data
     AIMTimetable = table2timetable(AIMTable);
+    
+    % add gsr in microsiemens
+    AIMTimetable = getGSR(AIMTimetable);
 
     % -------------------------------------------------------------------------
     % SAVE objects

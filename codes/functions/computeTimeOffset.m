@@ -19,6 +19,24 @@
 
 function offset = computeTimeOffset(TobiiTimetable, EEGAccelTimetable)
 
+    %% DEFINE OVERLAP TIMERANGE
+    
+    % define start and end times
+    startTime = max([TobiiTimetable.Datetime(1) EEGAccelTimetable.Datetime(1)]);
+    endTime = min([TobiiTimetable.Datetime(end) EEGAccelTimetable.Datetime(end)]);
+    
+    if (endTime-startTime) < 0
+        error("error: Timetables do not overlap")
+    end
+
+    % define timerange
+    S = timerange(startTime, endTime);
+    
+    %% REDEFINE TIMETABLES
+    
+    TobiiTimetable = TobiiTimetable(S,:);
+    EEGAccelTimetable = EEGAccelTimetable(S,:);
+
     %% GET ACCELEROMETER VALUES
 
     % define arrays with tobii and (downsampled) cgx acceleromter values
@@ -37,11 +55,10 @@ function offset = computeTimeOffset(TobiiTimetable, EEGAccelTimetable)
     EEGAccel = normalize(EEGAccel);
     EEGAccel = EEGAccel./max(abs(EEGAccel));
 
-    % change direction of cgx accelerometer values to point in the same
-    % direction as the tobii values
-    EEGAccel = [1 -1 1].*EEGAccel;
-
     %% COMPUTE CROSS CORRELATION
+    
+    % define tolerance for time offset (units=2ms)
+    tol = 250;
 
     % initialize arrays to store time indicies
     times = zeros(1, 3);
@@ -50,9 +67,9 @@ function offset = computeTimeOffset(TobiiTimetable, EEGAccelTimetable)
     for i = 1:3
         
         % compute xcorr
-        [r, lag] = xcorr(TobiiAccel(:,i), EEGAccel(:,i));
+        [r, lag] = xcorr(TobiiAccel(:,i), EEGAccel(:,i), tol);
         % find where max occurs in xcorr coefficents
-        [~,I] = max(abs(r));
+        [~,I] = max(r);
         % get offset time index
         t = lag(I);
 

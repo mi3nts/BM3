@@ -4,7 +4,7 @@
 % THE UNIVERSITY OF TEXAS AT DALLAS
 % MULTI-INTEGRATED REMOTE SENSING AND SIMULATION (MINTS)
 
-function [] = TobiiMp4ToAvi(inputPath)
+function [] = TobiiMp4ToAvi(inputPath, videoName)
 
     % grab current path
     homePath = pwd;
@@ -21,7 +21,11 @@ function [] = TobiiMp4ToAvi(inputPath)
     eval(strcat("cd ", inputPath))
 
     % convert video from mp4 to avi using ffmpeg
-    !ffmpeg -i fullstream.mp4 -c:v mjpeg fullstream.avi
+    if strcmp(videoName, 'fullstream')
+        !ffmpeg -i fullstream.mp4 -c:v mjpeg fullstream.avi
+    elseif strcmp(videoName, 'eyesstream')
+        !ffmpeg -i eyesstream.mp4 -c:v mjpeg eyesstream.avi
+    end
 
     % change dir to orginal folder
     eval(strcat("cd ", homePath))

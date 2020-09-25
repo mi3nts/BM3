@@ -60,7 +60,7 @@ function [] = EEGTobiiMarkerSync(YEAR, MONTH, DAY, TRIAL, USER, EEG, Tobii)
     % get timerange of TobiiTimetable
     S = timerange(TobiiTimetable.Datetime(1),TobiiTimetable.Datetime(end));
 
-    % retime timetables to have regual time intervals
+    % retime timetables to have regular time intervals
     EEGAccelTimetable = retime(EEGAccelTimetable,...
         'regular','linear','TimeStep', milliseconds(2));
     TobiiTimetable = retime(TobiiTimetable,...

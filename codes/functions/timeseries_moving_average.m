@@ -5,14 +5,13 @@ function [MovingAverage,MovingVariance,MovingRepresentativeness] = ...
 % window: the size of the window e.g. seconds(1) would be a one second window
 % UseParallel: 0 or 1. 1 to use parfor and 0 not to use parfor
 
-% Make the inputs into a timetable so we can use the withtol funtion to define the moving window.
+% Make the inputs into a timetable so we can use the withtol funtion to 
+% define the moving window.
 
 Data=timetable(t,v);
 
 % initialize the output values (initially fill with NaN).
 MovingAverage=nan(size(t));
-% iwant=find(MovingAverage==0);
-% MovingAverage(iwant)=NaN;
 MovingVariance=MovingAverage;
 MovingRepresentativeness=MovingAverage;
 

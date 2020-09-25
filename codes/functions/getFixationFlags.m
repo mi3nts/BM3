@@ -23,14 +23,14 @@ function newTobiiTimetable = getFixationFlags(oldTobiiTimetable)
     % define fixation threshold
     fixationThreshold = 2;
 
-    % compute angular speed via forward finite difference
-    angularSpeed = (diff(theta)/h);
+    % compute angular speed 
+    angularSpeed = (gradient(theta)/h);
     
     %% DEFINE FIXATION FLAG
 
     FixationFlag = NaN(height(oldTobiiTimetable),1);
 
-    for i = 1:height(oldTobiiTimetable)-1
+    for i = 1:height(oldTobiiTimetable)
 
         % if angular speed is nan set flag to nan
         if isnan(angularSpeed(i))
