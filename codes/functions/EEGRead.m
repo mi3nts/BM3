@@ -211,6 +211,8 @@ function[] = EEGRead(YEAR, MONTH, DAY, TRIAL, USER, EEG)
         EEGAccelTimetable = getRpeaks(EEGAccelTimetable, 'EEG');
         % 4 different heart rate variability measures
         EEGAccelTimetable = getHRV(EEGAccelTimetable, 'rpeaks', 1);
+        % breath rate
+        EEGAccelTimetable = getMovingBR(EEGAccelTimetable);
 
         
     end

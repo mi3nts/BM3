@@ -20,7 +20,6 @@ function MovingRMS = moving_rms(t, v, window, UseParallel)
 
     % Make the inputs into a timetable so we can use the withtol funtion to 
     % define the moving window.
-
     Data=timetable(t,v);
 
     % initialize the output values (initially fill with NaN).
@@ -40,7 +39,7 @@ function MovingRMS = moving_rms(t, v, window, UseParallel)
         end
 
     else
-        % loop over timesteps in parallel
+        % loop over timesteps
         for i=1:length(t)
 
             % select the timesteps within the time window of interest

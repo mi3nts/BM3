@@ -10,56 +10,71 @@
 
 function newTobiiTimetable = getBlinkFlags(oldTobiiTimetable)
 
-    %% LABEL BLINKS BASED ON 
+    %% LABEL BLINKS BASED ON NANS
 
-    % define number of rows in table
-    numRecords = height(oldTobiiTimetable);
+    % define threshold for blink detection (that is number of consecutive nan
+    % values are needed to classify sequence of records as a blink).
+    % Default value corresponds to 0.2 sec (200 ms) of nans.
+    blinkNumSamples = 0.2/seconds(oldTobiiTimetable.Properties.TimeStep);
 
-    % initialize blink array
-    BlinkFlag = zeros(numRecords,1);
-    % initialize blink array to be nan if AveragePupilDiameter is nan
-    BlinkFlag(isnan(oldTobiiTimetable.AveragePupilDiameter)) = NaN;
+    % get nan elements in tobii timetable
+    nans = isnan(oldTobiiTimetable.GazeIndex_GazePosition_Timetable);
 
-    % initialize a nanSwitch
-    nanSwitch = [0 0];
+    % compute difference between elements in nans
+    diffNans=[diff(nans); 0];
 
-    % iterate through each row of table
-    for i=1:numRecords
+    % initialize loop variables 
+    BlinkFlag = zeros(size(nans));
+    nanFlag = 0;
+    nanCounter = 0;
 
-        % check if both left and right pupil diameter are nans
-        if isnan(oldTobiiTimetable.PupilDiameter_LeftPupilDiameter_Timetable(i)) && ...
-               isnan(oldTobiiTimetable.PupilDiameter_RightPupilDiameter_Timetable(i)) 
+    % start loop iterate over length of nans
+    for i = 1:length(nans)
 
-            % if both left and right pupil diameter are nans and nan switch is
-            % already active go to next row
-            if nanSwitch(1)
+        % take ith element in diffNans
+        ele = diffNans(i);
 
-                continue
+        % case 1: do nothing
+        if ele==0 && nanFlag==0
+            continue
+        end
 
-            % if both left and right pupil diameter are nans and nan switch is
-            % not active activate it and store current index
-            else
+        % case 2: set nanFlag
+        if ele==1 && nanFlag==0
+            nanFlag = 1;
+            continue
+        end
 
-                nanSwitch = [1 i];
+        % case 3: return error this shouldn't happen
+        if ele==-1 && nanFlag==0
+            disp('error: ele=-1 & nanFlag=0')
+            break
+        end
 
+        % case 4: update nanCounter
+        if ele==0 && nanFlag==1
+            nanCounter = nanCounter+1;
+            continue
+        end
+
+        % case 5: return error this shouldn't happen
+        if ele==1 && nanFlag==1
+            disp('error: ele=1 & nanFlag=1')
+            break
+        end
+
+        % case 6: determine if sequence of records are "blinks". reset nanFlag.
+        % reset nanCounter
+        if ele==-1 && nanFlag==1
+            % determine if sequence of records are "blinks"
+            if nanCounter >= blinkNumSamples
+                BlinkFlag(i-nanCounter:i-1) = 1;
             end
-
-        % check if both left and right pupil diameter are not nans and
-        % nanSwitch is active
-        elseif nanSwitch(1)
-
-            % check if interval of bilateral nans is less than 6
-            if length(nanSwitch(2):i-1) < 7
-
-                % if interval of bilateral nans is less than 6 label all rows
-                % in nan interval as blinks
-                BlinkFlag(nanSwitch(2):i-1) = 1;
-
-            end
-
-            % deactivate nanSwtich
-            nanSwitch = [0 0];
-
+            % reset nanFlag
+            nanFlag = 0;
+            % reset nanCounter
+            nanCounter = 0;
+            continue
         end
 
     end

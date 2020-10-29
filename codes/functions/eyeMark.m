@@ -41,6 +41,6 @@ function [landmarks, separations] = eyeMark(im)
     separations = double(output{2});
     
     % change to home directory
-    homeDir
+    homeDir()
 
 
