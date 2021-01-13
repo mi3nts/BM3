@@ -8,7 +8,17 @@ function [] = homeDir()
 
 %% change directory to BM3 home folder
 str = pwd;  % get current path
-folderNames = split(str,'/');   % get folder names in current path
+
+% get folder names in current path
+if contains(computer, 'WIN')
+
+    folderNames = split(str,'\'); 
+
+else
+    
+    folderNames = split(str,'/'); 
+end
+    
 
 % find place of BM3 in path
 idx = length(folderNames) - find(folderNames=="BM3") - 1;
