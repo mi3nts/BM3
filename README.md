@@ -22,6 +22,8 @@ The hardware systems that are readily compatible with __BM3__ include:
 
 Raw data from these systems can be read, aligned, and merged into aggregate dataset using __BM3__.
 
+__Note:__ Library has been developed and tested on MAC/Linux OS, thus some functionalities may not readily work in Windows Environment 
+
 ## Quickstart
 
 __BM3__ is designed to be mobile and easy to use. To get started complete the following steps:
