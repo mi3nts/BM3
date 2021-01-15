@@ -20,24 +20,19 @@ function[] = EEGRead(YEAR, MONTH, DAY, TRIAL, USER, EEG)
     ID = strcat(YEAR, '_', MONTH, '_',DAY, '_',TRIAL, '_',USER, '_', EEG);
     pathID = strrep(ID,'_','/');
 
-     % change directory to home directory if not already in it
-    temp  = split(pwd,'/');
-    if ~strcmp(temp(end),'BM3')
-         homeDir
-    end
+    % change directory to proper parent
+    homeDir
 
     % add paths to eeglab folders
     addEEGLabFunctions
 
     % use long format
     format long
-    
-    % define a switch for if EEG is tethered
-    tetherSwitch = 0;
 
     %% -------------------------------------------------------------------------
     % GET START DATE AND TIME
     % -------------------------------------------------------------------------
+
     % define header filename
     header = strcat('raw/',pathID,'/',ID,'/',ID,'.vhdr');
 
@@ -89,14 +84,14 @@ function[] = EEGRead(YEAR, MONTH, DAY, TRIAL, USER, EEG)
     % if mobile-128 is unteathered acceleration channels will be 64 65 and 66
     % if 128 is teathered to AIM then accel channels will be 77 78 79
     % if there was an improper tether accel channels will be 72 73 74
-    
+
     % untethered case
     try
         AccelEEG = pop_select( EEG, 'channel',{'ACC64' 'ACC65' 'ACC66'});
     catch
         tetherSwitch = 1;
     end
-    
+
     if tetherSwitch
         % tethered cases
         try
@@ -115,7 +110,7 @@ function[] = EEGRead(YEAR, MONTH, DAY, TRIAL, USER, EEG)
     auxNames = {'PacketCounter' 'TRIGGER'};
 
     AuxEEG = pop_select( EEG, 'channel', {'Packet Counter' 'TRIGGER'});
-    
+
     % if mobile-128 is tethered create structure with AIM2 variables
     if tetherSwitch == 1
     % create structure with only AIM2 inputs 
@@ -123,16 +118,24 @@ function[] = EEGRead(YEAR, MONTH, DAY, TRIAL, USER, EEG)
             'ECG' 'Resp' 'PPG' 'SpO2' 'HR' 'GSR' 'Temp'...
             'AUX1' 'AUX2'};
 
-        AIMEEG = pop_select( EEG, 'channel', {'ExG 1' 'ExG 2' 'ExG 3' 'ExG 4'...
-            'ECG.' 'Resp.' 'PPG' 'SpO2' 'HR' 'GSR' 'Temp.'...
-            'AUX 1' 'AUX 2'}); 
+        try
+            % reading AIM for older version of CGX software
+            AIMEEG = pop_select( EEG, 'channel', {'ExG 1' 'ExG 2' 'ExG 3' 'ExG 4'...
+                'ECG.' 'Resp.' 'PPG' 'SpO2' 'HR' 'GSR' 'Temp.'...
+                'AUX 1' 'AUX 2'}); 
+        catch
+            % reading AIM for new version of CGX software
+            AIMEEG = pop_select( EEG, 'channel', {'ExGa 1' 'ExGa 2' 'ExGa 3' 'ExGa 4'...
+                'ECG ' 'Resp.' 'PPG' 'SpO2' 'HR' 'GSR' 'Temp.'...
+                'AUX 1' 'AUX 2'}); 
+        end
     end
     %% -------------------------------------------------------------------------
     % TIMESTAMPS
     % -------------------------------------------------------------------------
     % create vector with timestamps in milliseconds since start of collection
     mstime = milliseconds(EEG64.times);
-    
+
     % create table with actual time stamp
     datetimes = array2table((start_date + start_time + mstime)',...
         'VariableNames', "Datetime");
@@ -151,13 +154,13 @@ function[] = EEGRead(YEAR, MONTH, DAY, TRIAL, USER, EEG)
     % create table with auxiliary inputs are variables
     AuxTable = [datetimes ...
         array2table(AuxEEG.data', 'VariableNames', auxNames)];
-    
+
     if tetherSwitch == 1
         % create table with AIM inputs are variables
         AIMTable = [datetimes ...
             array2table(AIMEEG.data', 'VariableNames', AIMNames)];
     end
-    
+
     % find off axis electrodes (excluding Tp10)
     idx = [];
     for i = 1:length(electrodeNames)-1
@@ -199,10 +202,10 @@ function[] = EEGRead(YEAR, MONTH, DAY, TRIAL, USER, EEG)
 
     % create timetable of all data
     EEGAccelTimetable = table2timetable(EEGAccelTable);
-        
+
     % add additional biometrics
     if tetherSwitch
-        
+
         % GSR in microsiemens
         EEGAccelTimetable = getGSR(EEGAccelTimetable);
         % core temperature in celsius
@@ -214,16 +217,15 @@ function[] = EEGRead(YEAR, MONTH, DAY, TRIAL, USER, EEG)
         % breath rate
         EEGAccelTimetable = getMovingBR(EEGAccelTimetable);
 
-        
+
     end
 
     %% -------------------------------------------------------------------------
     % SAVE objects
     % -------------------------------------------------------------------------
-    % check if proper folder for storing timetables exists, if not create it
-    if ~exist(strcat('objects/', pathID), 'dir')
-        mkdir(strcat('objects/', pathID))
-    end
+    % define object name and path name
+    objectName = 'EEGAccelTimetable';
+    objectPath = getFilePath('object', ID, objectName);
 
-    % save timetables
-    save(strcat('objects/', pathID, '/', ID, '_EEGAccelTimetable'), 'EEGAccelTimetable');
+    % save timetable
+    save(objectPath, objectName)

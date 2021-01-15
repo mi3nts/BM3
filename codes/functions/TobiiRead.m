@@ -10,7 +10,7 @@
 
 % CODE AUTHORED BY: SHAWHIN TALEBI
 % THE UNIVERSITY OF TEXAS AT DALLAS
-% MULTI-INTEGRATED REMOTE SENSING AND SIMULATION (MINTS)
+% MULTI-SCALE INTEGRATED REMOTE SENSING AND SIMULATION (MINTS)
 
 % ------------------------------------------------------------------------- 
 function[] = TobiiRead(YEAR, MONTH, DAY, TRIAL, USER, Tobii)
@@ -18,22 +18,35 @@ function[] = TobiiRead(YEAR, MONTH, DAY, TRIAL, USER, Tobii)
     % change number format to long
     format long
 
-    % get ID and pathID
+    % get ID
     [ID, pathID] = makeIDs(YEAR, MONTH, DAY, TRIAL, USER, Tobii);
 
-    % check if livedata.json file exists, if not uncompress it
-    if ~exist(strcat('raw/', pathID,'/', ID,...
-            '/segments/1/livedata.json'), 'file')
+    % define path of data json file 
 
-        gunzip(strcat('raw/', pathID,'/', ID,...
-            '/segments/1/livedata.json.gz'), ...
-            strcat('raw/', pathID,'/', ID,...
-            '/segments/1'))
+    % windows case
+    if contains(computer, 'WIN')
+        seperator = '\';
+
+    % mac and linux case
+    else
+        seperator = '/';
+    end
+
+    % define path of folder with tobii data
+    dataFolderName = strcat('raw', seperator, ...
+        pathID,seperator, ...
+        ID,seperator, ...
+        'segments',seperator,...
+        '1',seperator);
+
+    % check if livedata.json file exists, if not uncompress it
+    if ~exist(strcat(dataFolderName,'livedata.json'), 'file')
+
+        gunzip(strcat(dataFolderName,'livedata.json.gz'), dataFolderName)
     end
 
     % read segment .json file
-    string1 = fileread(strcat('raw/', pathID,'/', ID, ...
-        '/segments/1/segment.json'));
+    string1 = fileread(strcat(dataFolderName, 'segment.json'));
 
     % decode segment.json file
     string_decoded = jsondecode(string1);
@@ -51,8 +64,7 @@ function[] = TobiiRead(YEAR, MONTH, DAY, TRIAL, USER, Tobii)
     elapsed_time = (stop_date+stop_time) - (start_date+start_time);
 
     % open livedata file
-    file = fopen(strcat('raw/', pathID,'/', ID,...
-            '/segments/1/livedata.json'));
+    file = fopen(strcat(dataFolderName,'livedata.json'));
 
     % DEFINE VARIABLE NAMES FOR TABLES BASED ON EVERY POSSIBLE LINE TYPE
 
@@ -497,7 +509,7 @@ function[] = TobiiRead(YEAR, MONTH, DAY, TRIAL, USER, Tobii)
         Gyroscope_Timetable, Accelerometer_Timetable, ...
         'regular','linear','TimeStep', milliseconds(10));
 
-    % create timetable that with tobii data suitable for analysis
+    % create timetable that with raw tobii data for later synchronization
     rawTobiiTimetable = synchronize(...
         LeftPupilCenter_Timetable, RightPupilCenter_Timetable, ...
         LeftPupilDiameter_Timetable, RightPupilDiameter_Timetable, ...
@@ -507,7 +519,7 @@ function[] = TobiiRead(YEAR, MONTH, DAY, TRIAL, USER, Tobii)
         PTS_Timetable, VTS_Timetable, EVTS_Timetable, ...
         Sync_Timetable, API_Timetable);
 
-     % -------------------------------------------------------------------------
+    % -------------------------------------------------------------------------
     % Remove values with errors
     % -------------------------------------------------------------------------
     TobiiTimetable = TobiiRemoveErrors(TobiiTimetable);
@@ -520,14 +532,14 @@ function[] = TobiiRead(YEAR, MONTH, DAY, TRIAL, USER, Tobii)
     % -------------------------------------------------------------------------
     % Save objects 
     % -------------------------------------------------------------------------
-    % create directory name for TobiiTimetable and TobiiTimetable
-    directory = strcat('objects/', pathID);
-    rawDirectory = strcat('raw/', pathID);
+    % create strings for TobiiTimetable and rawTobiiTimetable
+    objectName = 'TobiiTimetable';
+    rawName = 'rawTobiiTimetable';
 
-    % check if proper folder in tables exists, if not create it
-    createDir(directory)
-    createDir(rawDirectory)
+    % get path string for each file
+    objectPath = getFilePath('object', ID, objectName);
+    rawPath = getFilePath('raw', ID, rawName);
 
     % save timetables
-    save(strcat(directory,'/', ID,'_TobiiTimetable'), 'TobiiTimetable');
-    save(strcat(rawDirectory,'/', ID,'_rawTobiiTimetable'), 'rawTobiiTimetable');
+    save(objectPath, objectName)
+    save(rawPath, rawName)

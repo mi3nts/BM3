@@ -11,12 +11,21 @@
 %     OR pathID INPUT [].
 
 % THE UNIVERSITY OF TEXAS AT DALLAS
-% MULTI-INTEGRATED REMOTE SENSING AND SIMULATION (MINTS)
 % CODE AUTHORED BY: SHAWHIN TALEBI
+% MULTI-SCALE INTEGRATED REMOTE SENSING AND SIMULATION (MINTS)
 
 function [ID, pathID] = makeIDs(YEAR, MONTH, DAY, TRIAL, USER, DEVICE)
 
+% windows case
+if contains(computer, 'WIN')
+    seperator = '\';
 
+% mac and linux case
+else
+    seperator = '/';
+end
+
+% create ID
 if ~isempty(DEVICE)
     ID = strcat(YEAR, '_', MONTH, '_',DAY, '_',TRIAL, '_',USER, '_',...
         DEVICE);
@@ -26,8 +35,10 @@ else
    
 end
 
-pathID = strrep(ID,'_','/');
+% create pathID
+pathID = strrep(ID,'_',seperator);
 
+% synchronized case
 if strcmp(DEVICE,'Synchronized')
-    pathID = strrep(pathID, '/S', '/_S');
+    pathID = strrep(pathID, strcat(seperator,'S'), strcat(seperator,'_S'));
 end

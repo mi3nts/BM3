@@ -10,10 +10,12 @@ function [] = homeDir()
 str = pwd;  % get current path
 
 % get folder names in current path
+% windows case
 if contains(computer, 'WIN')
 
     folderNames = split(str,'\'); 
 
+% mac and linux case
 else
     
     folderNames = split(str,'/'); 
@@ -31,7 +33,20 @@ if idx ~= -1
     eval(strcat("cd ", "'",(str(1:idcs(end-idx))), "'"))
 end
 
-% add functions folder to path
-addpath('./codes/functions/')
-% add functions folder to path
-addpath('./backend/prettyVariableNames/')
+% get folder names in current path
+% windows case
+if contains(computer, 'WIN')
+
+    % add functions folder to path
+    addpath('.\codes\functions\')
+    % add functions folder to path
+    addpath('.\backend\prettyVariableNames\')
+
+% mac and linux case
+else
+    
+    % add functions folder to path
+    addpath('./codes/functions/')
+    % add functions folder to path
+    addpath('./backend/prettyVariableNames/') 
+end

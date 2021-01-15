@@ -19,6 +19,7 @@ function newTobiiTimetable = getBlinkFlags(oldTobiiTimetable)
 
     % get nan elements in tobii timetable
     nans = isnan(oldTobiiTimetable.GazeIndex_GazePosition_Timetable);
+    nans(1) = 0;
 
     % compute difference between elements in nans
     diffNans=[diff(nans); 0];
@@ -47,7 +48,7 @@ function newTobiiTimetable = getBlinkFlags(oldTobiiTimetable)
 
         % case 3: return error this shouldn't happen
         if ele==-1 && nanFlag==0
-            disp('error: ele=-1 & nanFlag=0')
+            disp('error in getBlinkFlags: ele=-1 & nanFlag=0')
             break
         end
 
@@ -59,7 +60,7 @@ function newTobiiTimetable = getBlinkFlags(oldTobiiTimetable)
 
         % case 5: return error this shouldn't happen
         if ele==1 && nanFlag==1
-            disp('error: ele=1 & nanFlag=1')
+            disp('error in getBlinkFlags: ele=1 & nanFlag=1')
             break
         end
 
