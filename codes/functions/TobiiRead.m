@@ -537,7 +537,7 @@ function[] = TobiiRead(YEAR, MONTH, DAY, TRIAL, USER, Tobii)
     rawName = 'rawTobiiTimetable';
 
     % get path string for each file
-    objectPath = getFilePath('object', ID, objectName);
+    objectPath = getFilePath('objects', ID, objectName);
     rawPath = getFilePath('raw', ID, rawName);
 
     % save timetables

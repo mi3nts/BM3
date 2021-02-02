@@ -43,9 +43,9 @@ function [] = EEGReadAll(EEG, NumberOfWorkers)
             % get input strings for ith raw EEG file for EEGRead
             [YEAR, MONTH, DAY, TRIAL, USER, EEG] = decodeID(fileIDs(i));
             
-            if strcmp(MONTH, '07')
-                continue
-            end
+%             if strcmp(MONTH, '07')
+%                 continue
+%             end
 
             % read raw EEG data
             EEGRead(YEAR, MONTH, DAY, TRIAL, USER, EEG);

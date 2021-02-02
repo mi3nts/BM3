@@ -12,12 +12,22 @@ function [] = writeDS(DS)
         DS.DAY,'_', ...
         DS.TRIAL,'_', ...
         DS.USER, '_dataSheet.txt');
+    
+    
 
     % get path name
     [~, pathID] = makeIDs(DS.YEAR, DS.MONTH, DS.DAY, DS.TRIAL, DS.USER, []);
+    
+    % windows case
+    if contains(computer, 'WIN')
+        seperator = '\';
+    % mac and linux case
+    else
+        seperator = '/';
+    end
 
     % define full file path name
-    filePath = strcat('raw/', pathID, '/', filename);
+    filePath = strcat('raw',seperator, pathID, seperator, filename);
 
     % open text file handle
     fileID = fopen(filePath,'w');

@@ -15,6 +15,9 @@
 
 function br = computeBR(v,t,Fs)
 
+    % convert nans to zeros
+    v(isnan(v)) = 0;
+
     % apply high pass filter to signal
     y = highpass(v,0.133,Fs,'Steepness',0.85,'StopbandAttenuation',60);
     % apply high pass filter to filtered signal

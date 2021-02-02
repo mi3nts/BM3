@@ -8,19 +8,22 @@
 % -------------------------------------------------------------------------
 
 function [] = initial()
-    % change directory to home directory if not already in it
-    temp  = split(pwd,'/');
-    if ~strcmp(temp(end),'BM3')
-         homeDir
+    % windows case
+    if contains(computer, 'WIN')
+        seperator = '\';
+
+    % mac and linux case
+    else
+        seperator = '/';
     end
    
     % change directory to raw/_newData
-    cd raw/_newData
+    eval(strcat("cd raw",seperator,"_newData"));
 
     % get folder names from _newData folder
     struc = dir;
 
-    % % change directory back to home directory
+    % change directory back to home directory
     homeDir
 
     % iterate thorugh each folder name 
@@ -34,30 +37,30 @@ function [] = initial()
             continue
         end
 
-        pathID = strrep(ID,'_','/');
+        pathID = strrep(ID,'_', seperator);
 
         % check if folder corresponding to ID exists for raw data, if not make it
-        if ~exist(strcat('raw/',pathID), 'dir')
-            mkdir(strcat('raw/',pathID))
+        if ~exist(strcat('raw',seperator,pathID), 'dir')
+            mkdir(strcat('raw',seperator,pathID))
         end
 
         % move folder to proper directory
         try
-            eval(strcat("movefile ", strcat('raw/_newData/',ID, " "), ...
-                strcat('raw/',pathID)));
+            eval(strcat("movefile ", strcat('raw',seperator,'_newData',seperator,ID, " "), ...
+                strcat('raw',seperator,pathID)));
         catch
             disp(strcat("data already exist for ",ID))
         end
 
         % check if folder corresponding to ID exists for data objects, if not make it
-        if ~exist(strcat('objects/',pathID), 'dir')
-            mkdir(strcat('objects/',pathID))
+        if ~exist(strcat('objects',seperator,pathID), 'dir')
+            mkdir(strcat('objects',seperator,pathID))
         end
 
         % check if _Synchronized folder corresponding to ID exists for data 
         % objects, if not make it
-        if ~exist(strcat('objects/',pathID(1:19),'/_Synchronized'), 'dir')
-            mkdir(strcat('objects/',pathID(1:19),'/_Synchronized'))
+        if ~exist(strcat('objects',seperator,pathID(1:19),seperator,'_Synchronized'), 'dir')
+            mkdir(strcat('objects',seperator,pathID(1:19),seperator,'_Synchronized'))
         end   
         
         % initialize biometric dataset for dataset

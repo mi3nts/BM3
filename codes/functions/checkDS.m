@@ -18,8 +18,17 @@ function [dataSheetExists, filePath] = checkDS(ID)
 
     % get path name
     [~, pathID] = makeIDs(YEAR, MONTH, DAY, TRIAL, USER, []);
+    
+    % windows case
+    if contains(computer, 'WIN')
+        seperator = '\';
+        
+    % mac and linux case
+    else
+        seperator = '/';
+    end
 
     % define full file path name
-    filePath = strcat('raw/', pathID, '/', filename);
+    filePath = strcat('raw',seperator, pathID, seperator, filename);
 
     dataSheetExists = exist(filePath, 'file');

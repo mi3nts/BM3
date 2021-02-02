@@ -22,8 +22,18 @@ function fileIDs = findAllFiles(dataRootFolder, dataObjectName)
 
     % get current path
     rootdir = pwd;
+    
+    % windows case
+    if contains(computer, 'WIN')
+        seperator = '\';
+        
+    % mac and linux case
+    else
+        seperator = '/';
+    end
+    
     % search dir for desired files
-    eval(strcat("filelist = dir(fullfile(rootdir, '**/*", ...
+    eval(strcat("filelist = dir(fullfile(rootdir, '**",seperator,"*", ...
         dataObjectName, ...
         ".mat'));"));
 
@@ -38,7 +48,11 @@ function fileIDs = findAllFiles(dataRootFolder, dataObjectName)
     end
 
     % strip any trailing or leading underscores
-    fileIDs = strip(fileIDs,'_');
+    try
+        fileIDs = strip(fileIDs,'_');
+    catch
+        error('No files found')
+    end
 
     %% CHANGE TO OBJECTS FOLDER BACK TO BM3
 

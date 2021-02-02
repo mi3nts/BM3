@@ -225,7 +225,7 @@ function[] = EEGRead(YEAR, MONTH, DAY, TRIAL, USER, EEG)
     % -------------------------------------------------------------------------
     % define object name and path name
     objectName = 'EEGAccelTimetable';
-    objectPath = getFilePath('object', ID, objectName);
+    objectPath = getFilePath('objects', ID, objectName);
 
     % save timetable
     save(objectPath, objectName)
