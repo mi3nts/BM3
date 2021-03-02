@@ -38,15 +38,15 @@ end
 if contains(computer, 'WIN')
 
     % add functions folder to path
-    addpath('.\codes\functions\')
+    addpath('codes\functions\')
     % add functions folder to path
-    addpath('.\backend\prettyVariableNames\')
+    addpath('backend\prettyVariableNames\')
 
 % mac and linux case
 else
     
     % add functions folder to path
-    addpath('./codes/functions/')
+    addpath('codes/functions/')
     % add functions folder to path
-    addpath('./backend/prettyVariableNames/') 
+    addpath('backend/prettyVariableNames/') 
 end

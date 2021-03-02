@@ -12,7 +12,7 @@ if contains(computer, 'WIN')
     addpath('.\backend\eeglab2019_1\functions\adminfunc');
     addpath('.\backend\eeglab2019_1\functions\sigprocfunc');
     addpath('.\backend\eeglab2019_1\functions\guifunc');
-    addpath('.\backend\eeglab2019_1\plugins\Fileio20200130');
+    addpath('.\backend\eeglab2019_1\plugins\Fileio20210128');
 
     % add channel locations to path
     addpath('.\backend\channelLocations\');
@@ -23,7 +23,7 @@ else
     addpath('./backend/eeglab2019_1/functions/adminfunc');
     addpath('./backend/eeglab2019_1/functions/sigprocfunc');
     addpath('./backend/eeglab2019_1/functions/guifunc');
-    addpath('./backend/eeglab2019_1/plugins/Fileio20200130');
+    addpath('./backend/eeglab2019_1/plugins/Fileio20210128');
 
     % add channel locations to path
     addpath('./backend/channelLocations/');
