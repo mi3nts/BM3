@@ -19,7 +19,7 @@ function[] = TobiiRead(YEAR, MONTH, DAY, TRIAL, USER, Tobii)
     format long
 
     % get ID
-    [ID, pathID] = makeIDs(YEAR, MONTH, DAY, TRIAL, USER, Tobii);
+    [ID, ~] = makeIDs(YEAR, MONTH, DAY, TRIAL, USER, Tobii);
 
     % define path of data json file 
 
@@ -31,6 +31,9 @@ function[] = TobiiRead(YEAR, MONTH, DAY, TRIAL, USER, Tobii)
     else
         seperator = '/';
     end
+
+    % define pathID
+    pathID = strrep(ID,'_',seperator);
 
     % define path of folder with tobii data
     dataFolderName = strcat('raw', seperator, ...
@@ -458,6 +461,7 @@ function[] = TobiiRead(YEAR, MONTH, DAY, TRIAL, USER, Tobii)
     Sync_Table = sortrows(Sync_Table);
     API_Table = sortrows(API_Table);
 
+
     % CONVERT TABLES TO TIMETABLES
 
     LeftPupilCenter_Timetable = table2timetable(LeftPupilCenter_Table);
@@ -498,16 +502,34 @@ function[] = TobiiRead(YEAR, MONTH, DAY, TRIAL, USER, Tobii)
 
     end
 
+
+
     % SYNCRONIZE TIMETABLES
 
     % create timetable that with tobii data suitable for analysis
-    TobiiTimetable = synchronize(...
-        LeftPupilCenter_Timetable, RightPupilCenter_Timetable, ...
-        LeftPupilDiameter_Timetable, RightPupilDiameter_Timetable, ...
-        LeftGazeDirection_Timetable, RightGazeDirection_Timetable, ...
-        GazePosition_Timetable, GazePosition3D_Timetable, ...
-        Gyroscope_Timetable, Accelerometer_Timetable, ...
-        'regular','linear','TimeStep', milliseconds(10));
+    try
+        TobiiTimetable = synchronize(...
+            LeftPupilCenter_Timetable, RightPupilCenter_Timetable, ...
+            LeftPupilDiameter_Timetable, RightPupilDiameter_Timetable, ...
+            LeftGazeDirection_Timetable, RightGazeDirection_Timetable, ...
+            GazePosition_Timetable, GazePosition3D_Timetable, ...
+            Gyroscope_Timetable, Accelerometer_Timetable, ...
+            'regular','linear','TimeStep', milliseconds(10));
+    catch
+        % ENSURE TIMETABLES HAVE UNIQUE DATETIMES
+        for timetable = timetables
+            eval(strcat(timetable," = retime(",timetable,...
+                ",unique(",timetable,".Datetime),'mean');"));
+        end
+
+        TobiiTimetable = synchronize(...
+            LeftPupilCenter_Timetable, RightPupilCenter_Timetable, ...
+            LeftPupilDiameter_Timetable, RightPupilDiameter_Timetable, ...
+            LeftGazeDirection_Timetable, RightGazeDirection_Timetable, ...
+            GazePosition_Timetable, GazePosition3D_Timetable, ...
+            Gyroscope_Timetable, Accelerometer_Timetable, ...
+            'regular','linear','TimeStep', milliseconds(10));
+    end
 
     % create timetable that with raw tobii data for later synchronization
     rawTobiiTimetable = synchronize(...
@@ -519,7 +541,7 @@ function[] = TobiiRead(YEAR, MONTH, DAY, TRIAL, USER, Tobii)
         PTS_Timetable, VTS_Timetable, EVTS_Timetable, ...
         Sync_Timetable, API_Timetable);
 
-    % -------------------------------------------------------------------------
+     % -------------------------------------------------------------------------
     % Remove values with errors
     % -------------------------------------------------------------------------
     TobiiTimetable = TobiiRemoveErrors(TobiiTimetable);

@@ -9,9 +9,9 @@ function axPDD = visualizePCD(TobiiTimetable, ts, cmap)
     b = bar(TobiiTimetable.PupilCenter_Distance(ts) ...
         - nanmean(TobiiTimetable.PupilCenter_Distance));
     b.Parent.XLim = [0.25 1.75];
-    b.Parent.YLim = [(-1.1*(max(TobiiTimetable.PupilCenter_Distance) - ...
+    b.Parent.YLim = [(-1.05*(max(TobiiTimetable.PupilCenter_Distance) - ...
         nanmean(TobiiTimetable.PupilCenter_Distance))) ...
-        (1.1*(max(TobiiTimetable.PupilCenter_Distance) - ...
+        (1.15*(max(TobiiTimetable.PupilCenter_Distance) - ...
         nanmean(TobiiTimetable.PupilCenter_Distance)))];
     
     try
@@ -24,7 +24,7 @@ function axPDD = visualizePCD(TobiiTimetable, ts, cmap)
     axPDD = gca; 
     axPDD.XTickLabel = '';
     axPDD.YAxis.FontSize = 16;
-    axPDD.Title.String = {'Pupil Center'; 'Difference (mm)'};
+    axPDD.Title.String = {'Pupil Center'; 'Distance minus mean (mm)'};
     axPDD.Title.FontSize = 18;
 
     % update text with difference between pupil sizes

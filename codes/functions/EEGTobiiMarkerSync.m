@@ -54,7 +54,7 @@ function [] = EEGTobiiMarkerSync(YEAR, MONTH, DAY, TRIAL, USER, EEG, Tobii)
     TobiiTimetable = TobiiRemoveErrors(rawTobiiTimetable);
 
     % Compute and append additional pupil and gaze variables
-    TobiiTimetable = getPDAllVars(TobiiTimetable);
+    TobiiTimetable = getAllTobiiVars(TobiiTimetable);
 
     %% SYNCHRONIZE TIMETABLES
 
@@ -73,6 +73,10 @@ function [] = EEGTobiiMarkerSync(YEAR, MONTH, DAY, TRIAL, USER, EEG, Tobii)
     % only keep common timerange
     EEGAccelTobiiTimetable = EEGAccelTobiiTimetable(S,:);
     
+    % set sample rate
+    EEGAccelTobiiTimetable.Properties.SampleRate = ...
+        EEGAccelTimetable.Properties.SampleRate;
+    whos
     %% SAVE SYNCHRONIZED TIMETABLE
     
     % check if proper folder for storing timetables exists, if not create it

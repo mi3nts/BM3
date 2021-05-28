@@ -27,7 +27,7 @@ function SOMTimetable = performSOM(Timetable, iSOM, jSOM)
     % convert table to timetable
     Data = table2array(Table(:,2:end));
     % get SOM classes
-    classes = getClassesSOM(Data, iSOM, jSOM);
+    classes = getClassesSOM(real(Data), iSOM, jSOM);
     % create timetable of SOM classes
     SOMTimetable = table2timetable([Table(:,1) array2table(classes', ...
         'VariableNames', "Class")]);

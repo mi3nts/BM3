@@ -26,7 +26,12 @@ function outTimetable = interpolTobiiNaNs(inTimetable)
         temp = timetable2table(inTimetable(:,j));
         temp = temp(:,2);
         temp = table2array(temp);
-        temp = interpolNaNs(temp);
+        try
+            temp = interpolNaNs(temp);
+        catch
+            disp(strcat("Unable to interpolate ", ...
+                inTimetable.Properties.VariableNames(j)));
+        end
         
         % replace jth column in timetable with interpolated values
         inTimetable(:,j) = array2table(temp);

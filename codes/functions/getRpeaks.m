@@ -43,7 +43,7 @@ function outTimetable = getRpeaks(inTimetable, DEVICE)
         time = inTimetable.Datetime(end) - inTimetable.Properties.StartTime;
 
         % compute average HR
-        avgHR = length(locs)/minutes(time);
+        avgHR = mean(inTimetable.HR);
 
         % define min peak distance from average HR
         alpha = 1.5;

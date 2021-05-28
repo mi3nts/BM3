@@ -35,7 +35,7 @@ function[] = EEGRead(YEAR, MONTH, DAY, TRIAL, USER, EEG)
 
     % define header filename
     header = strcat('raw/',pathID,'/',ID,'/',ID,'.vhdr');
-
+    
     % open file for reading
     file = fopen(header);
     flag = 0;
@@ -75,7 +75,15 @@ function[] = EEGRead(YEAR, MONTH, DAY, TRIAL, USER, EEG)
         'CP4' 'PO3' 'PO4' 'F5' 'F6' 'C5' 'C6' 'P5' 'P6' 'AF7' 'AF8' 'FT7'...
         'FT8' 'TP7' 'TP8' 'PO7' 'PO8' 'Fpz' 'CPz' 'POz' 'TP10'};
 
-    EEG64 = pop_select( EEG, 'channel', electrodeNames);
+    try
+        EEG64 = pop_select( EEG, 'channel', electrodeNames);
+    catch
+        warning('Failed to read 64 channels. Trying without AF8')
+        electrodeNames(54) = [];
+        EEG64 = pop_select( EEG, 'channel', electrodeNames);
+        noAF8Switch = 1;
+    end
+
     EEG64.setname = 'EEG64';
 
     % create structure with only Accelerometer inputs
@@ -85,31 +93,30 @@ function[] = EEGRead(YEAR, MONTH, DAY, TRIAL, USER, EEG)
     % if 128 is teathered to AIM then accel channels will be 77 78 79
     % if there was an improper tether accel channels will be 72 73 74
 
-    % untethered case
-    try
-        AccelEEG = pop_select( EEG, 'channel',{'ACC64' 'ACC65' 'ACC66'});
-    catch
-        tetherSwitch = 1;
-    end
+    % create cell array of raw accelerometer labels
+    rawAccelNames = {};
+    for i = 1:EEG.nbchan
 
-    if tetherSwitch
-        % tethered cases
-        try
-            AccelEEG = pop_select( EEG, 'channel',{'ACC77' 'ACC78' 'ACC79'});
+        label = EEG.chanlocs(i).labels;
 
-        catch
-            AccelEEG = pop_select( EEG, 'channel',{'ACC72' 'ACC73' 'ACC74'});
-            tetherSwitch = 0;
-            disp('----warning: bad tether----')
+        if contains(EEG.chanlocs(i).labels,'ACC')
+            % if label is for accelerometer add it to cell array
+            rawAccelNames = [rawAccelNames {label}];
         end
     end
 
+    % create structure with only accelerometer inputs 
+    AccelEEG = pop_select( EEG, 'channel',rawAccelNames);
     AccelEEG.setname= 'AccelEEG';
 
     % create structure with only Auxilliary inputs 
     auxNames = {'PacketCounter' 'TRIGGER'};
-
     AuxEEG = pop_select( EEG, 'channel', {'Packet Counter' 'TRIGGER'});
+
+    % set tether switch
+    if str2num(strrep(rawAccelNames{1}, 'ACC', '')) > 66
+        tetherSwitch = 1;
+    end
 
     % if mobile-128 is tethered create structure with AIM2 variables
     if tetherSwitch == 1

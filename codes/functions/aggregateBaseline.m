@@ -7,6 +7,7 @@
 %     DAY = STRING. EX: "01"
 %     TRIAL = STRING. EX: "T01"
 %     USER = STRING. USER ID EX: "U00T"
+%     DEVICE = STRING. EX: 'EEG01', 'Synchronized'
 %     varNames = STRING ARRAY. DESIRED COGNITIVE LOAD VARIABLES
 
 % OUTPUT:
@@ -21,12 +22,12 @@
 % MULTI-SCALE INTEGRATED REMOTE SENSING AND SIMULATION (MINTS)
 
 function baseline_averages = aggregateBaseline(YEAR, MONTH, DAY, TRIAL, ...
-    USER, varNames)
+    USER, DEVICE, varNames, useTrigger)
 
     %% LOAD DATA
 
     % Load EEGTobiiTimetable
-    EEGTobiiTimetable = LoadTimetable(YEAR, MONTH, DAY, TRIAL, USER, 'Synchronized');
+    EEGTobiiTimetable = LoadTimetable(YEAR, MONTH, DAY, TRIAL, USER, DEVICE);
 
     %% DEFINE TEMPORARY TIMETABLE WITH DESIRED DATA
     
@@ -47,22 +48,24 @@ function baseline_averages = aggregateBaseline(YEAR, MONTH, DAY, TRIAL, ...
 
     %% ONLY KEEP RECORDS DURING BASELINE
 
-    % return trigger point indicies
-    triggerPoints = getTriggerPoints(EEGTobiiTimetable);
+    if useTrigger
+        % return trigger point indicies
+        triggerPoints = getTriggerPoints(EEGTobiiTimetable);
 
-    % keep records during baseline
-    CLTimetable = CLTimetable(triggerPoints(1):triggerPoints(2),:);
-    EEGTimetable = EEGTimetable(triggerPoints(1):triggerPoints(2),:);
+        % keep records during baseline
+        CLTimetable = CLTimetable(triggerPoints(1):triggerPoints(2),:);
+        EEGTimetable = EEGTimetable(triggerPoints(1):triggerPoints(2),:);
+    end
 
     % remove trigger variable
     CLTimetable = removevars(CLTimetable, "TRIGGER");
     %% AGGREGATE 
 
     % compute cognitive load averages
-    cl_averages = mean(CLTimetable.Variables);
+    cl_averages = nanmean(CLTimetable.Variables);
 
     % average EEG power spectra
-    pxx = pwelch(EEGTimetable.Variables, [], [], 512, EEGTimetable.Properties.SampleRate);
+    pxx = pwelch(rmmissing(EEGTimetable.Variables), [], [], 512, EEGTimetable.Properties.SampleRate);
     ps_averages = reshape(pxx, [1, 16448]);
 
     % concatenate averages

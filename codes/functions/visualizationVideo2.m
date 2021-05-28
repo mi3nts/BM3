@@ -162,9 +162,9 @@ function [] = visualizationVideo2(YEAR, MONTH, DAY, TRIAL, USER, ...
             v.Height*EEGAccelTobiiTimetable.GazePositionY(i),...
             500, 'r', 'LineWidth', 3)
 
-          ax = gca;
-          ax.XLim = [0 v.Width];
-          ax.YLim = [0 v.Height];
+        ax = gca;
+        ax.XLim = [0 v.Width];
+        ax.YLim = [0 v.Height];
 
         % plot past 10 records
         if i > 10
@@ -174,7 +174,7 @@ function [] = visualizationVideo2(YEAR, MONTH, DAY, TRIAL, USER, ...
             'g--', 'LineWidth', 3);
         end
         
-         hold off
+        hold off
 
         % plot timestamp
         text(2,30, string(EEGAccelTobiiTimetable.Datetime(i)), ...
