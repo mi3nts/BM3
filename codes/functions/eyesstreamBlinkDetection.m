@@ -15,7 +15,6 @@ function [] = eyesstreamBlinkDetection(YEAR, MONTH, DAY, TRIAL, USER, ...
 [ID, pathID] = makeIDs(YEAR, MONTH, DAY, TRIAL, USER, DEVICE);
 
 % define path to eyestream video
-curDir = pwd;
 vidFilename = strcat(pwd,"/raw/",pathID,"/", ID,"/segments/1/eyesstream.mp4");
 outputFilename = strcat(pwd,"/raw/",pathID,"/", ID, ...
     "/segments/1/eyesstream_blink_data.csv");

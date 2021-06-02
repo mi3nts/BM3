@@ -1,0 +1,41 @@
+% FUNCTION TO CONVERT AUDIO TO TEXT FILE. ROUTINE TAKES TOBII FULLSTREAM 
+% POV VIDEO AND CONVERTS IT INTO A TXT. NOTE: FULLSTREAM VIDEO MUST BE 
+% SAVED IN RAW SUBDIRECTORY FOR INPUT DATASET INFORMATION.
+
+% CODE AUTHORED BY: SHAWHIN TALEBI
+% THE UNIVERSITY OF TEXAS AT DALLAS
+% MULTI-SCALE INTEGRATED REMOTE SENSING AND SIMULATION (MINTS)
+
+%% FUNCTION
+
+function [] = fullstreamAudioToText(YEAR, MONTH, DAY, TRIAL, USER, ...
+    DEVICE, pythonPath)
+
+% get ID and pathID
+[ID, pathID] = makeIDs(YEAR, MONTH, DAY, TRIAL, USER, DEVICE);
+
+% define path to eyestream video
+audioFilename = strcat(pwd,"/raw/",pathID,"/", ID,"/segments/1/tobiiaudio.wav");
+outputFilename = strcat(pwd,"/raw/",pathID,"/", ID, ...
+    "/segments/1/fullstreamText.txt");
+
+% cd to dir with script
+cd backend/Audio_Text
+
+% add current directory to python path if not already added
+if count(py.sys.path,'') == 0
+    insert(py.sys.path,int32(0),'');
+end
+
+% create system command
+cmd = strcat(pythonPath, " audio_text_generator.py -a ", audioFilename , ...
+    " -o ", outputFilename);
+
+% execute system command
+try
+    system(cmd)
+catch
+    setenv('PATH', [getenv('PATH') '/Users/shawhin/opt/anaconda3/bin:/Users/shawhin/opt/anaconda3/condabin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/opt/X11/bin']);
+
+% change to home directory
+homeDir()
