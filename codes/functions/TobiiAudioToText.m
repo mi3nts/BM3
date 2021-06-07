@@ -11,6 +11,7 @@
 %     Tobii = STRING. TOBII DEVICE ID.
 %     pythonPath = STRING. PATH OF DESIRED VERSION OF PYTHON
 %     sysPath = STRING. SYSTEM PATH. GET FROM TERMINAL VIA: "printenv PATH"
+%     ffmpegPath = STRING. PATH TO INSTALLATION OF FFMPEG
 
 % CODE AUTHORED BY: SHAWHIN TALEBI
 % THE UNIVERSITY OF TEXAS AT DALLAS
@@ -18,8 +19,8 @@
 
 %% FUNCTION
 
-function [] = fullstreamAudioToText(YEAR, MONTH, DAY, TRIAL, USER, ...
-    Tobii, pythonPath, sysPath)
+function [] = TobiiAudioToText(YEAR, MONTH, DAY, TRIAL, USER, ...
+    Tobii, pythonPath, sysPath, ffmpegPath)
 
 % get ID and pathID
 [ID, pathID] = makeIDs(YEAR, MONTH, DAY, TRIAL, USER, Tobii);
@@ -43,16 +44,12 @@ cmd = strcat(pythonPath, " audio_text_generator.py -a ", audioFilename , ...
 
 % if audio file does not exist, make it
 if ~isfile(audioFilename)
-    TobiiAudioRead(YEAR, MONTH, DAY, TRIAL, USER, Tobii)
+    TobiiAudioRead(YEAR, MONTH, DAY, TRIAL, USER, Tobii, ffmpegPath)
 end
 
 % execute system command
-try
-    system(cmd)
-catch
-    setenv('PATH', [getenv('PATH') sysPath]);
-    system(cmd)
-end
+setenv('PATH', [getenv('PATH') sysPath]);
+system(cmd)
 
 % change to home directory
 homeDir()

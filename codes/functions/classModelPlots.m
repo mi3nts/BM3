@@ -9,8 +9,70 @@
 function [] = classModelPlots(modelPath, Mdl, ...
     YTrain, YTest, ...
     YTrain_predicted, YTest_predicted, ...
-    modelName, PredictorNames)
-
+    modelName, PredictorNames, TargetName)
+    %% ROC PLOTS
+    
+    % create figure
+    figure(4)
+    fig = gcf;
+    fig.Units = 'normalized';
+    fig.Position = [0 0 1 1];
+    
+    % get labels in one hot encoding
+    classLabels = unique(YTrain);
+    labels = onehotencode(YTrain, 2);
+    labels_predicted = onehotencode(YTrain_predicted, 2);
+    
+    % plot roc
+    plotroc(labels',labels_predicted')
+    ax=gca;
+    ax.Legend.String = string(classLabels);
+    ax.Legend.FontSize = 14;
+    ax.Legend.Location = 'southeast';
+    
+    ax.Title.String = strcat(TargetName, " Training ROC");
+    ax.Title.FontSize = 18;
+    
+    ax.XLabel.FontSize = 16;
+    ax.XAxis.FontSize = 16;
+    ax.YLabel.FontSize = 16;
+    ax.YAxis.FontSize = 16;
+    
+    % save training ROC
+    directory = strcat(modelPath,modelName,"/Plots/ROC/");
+    createDir(directory)
+    print(strcat(directory, modelName,"_TrainingROC"),'-dpng')
+    
+     % create figure
+    figure(5)
+    fig = gcf;
+    fig.Units = 'normalized';
+    fig.Position = [0 0 1 1];
+    
+    % get labels in one hot encoding
+    classLabels = unique(YTest);
+    labels = onehotencode(YTest, 2);
+    labels_predicted = onehotencode(YTest_predicted, 2);
+    
+    % plot roc
+    plotroc(labels',labels_predicted')
+    ax=gca;
+    ax.Legend.String = string(classLabels);
+    ax.Legend.FontSize = 14;
+    ax.Legend.Location = 'southeast';
+    
+    ax.Title.String = strcat(TargetName, " Testing ROC");
+    ax.Title.FontSize = 18;
+    
+    ax.XLabel.FontSize = 16;
+    ax.XAxis.FontSize = 16;
+    ax.YLabel.FontSize = 16;
+    ax.YAxis.FontSize = 16;
+    
+    % save training ROC
+    directory = strcat(modelPath,modelName,"/Plots/ROC/");
+    createDir(directory)
+    print(strcat(directory, modelName,"_TestingROC"),'-dpng')
     %% PLOT CONFUSION MATRIX
     
     % remove unused categories from categorical arrays
@@ -25,6 +87,16 @@ function [] = classModelPlots(modelPath, Mdl, ...
     fig.Units = 'normalized';
     fig.Position = [0 0 1 1];
     plotconfusion(YTrain, YTrain_predicted)
+    ax=gca;
+    set(ax,'FontSize',16)
+    
+    ax.Title.String = strcat(TargetName, " Training Confusion Matrix");
+    ax.Title.FontSize = 18;
+    
+    ax.XLabel.FontSize = 16;
+    ax.XAxis.FontSize = 16;
+    ax.YLabel.FontSize = 16;
+    ax.YAxis.FontSize = 16;
     
     % save training confusion matrix
     directory = strcat(modelPath,modelName,"/Plots/ConfusionMatrices/");
@@ -37,6 +109,15 @@ function [] = classModelPlots(modelPath, Mdl, ...
     fig.Units = 'normalized';
     fig.Position = [0 0 1 1];
     plotconfusion(YTest, YTest_predicted)
+    ax=gca;
+    
+    ax.Title.String = strcat(TargetName, " Testing Confusion Matrix");
+    ax.Title.FontSize = 18;
+    
+    ax.XLabel.FontSize = 14;
+    ax.XAxis.FontSize = 16;
+    ax.YLabel.FontSize = 14;
+    ax.YAxis.FontSize = 16;
     
     % save training confusion matrix
     print(strcat(directory, modelName,"_TestingConfusion"),'-dpng')
@@ -99,3 +180,5 @@ function [] = classModelPlots(modelPath, Mdl, ...
     directory = strcat(modelPath, modelName,"/Plots/ImportanceRanking/");
     createDir(directory)
     print(strcat(directory, modelName,"_ImpRank_T", string(n_top_bars)),'-dpng')
+    
+    

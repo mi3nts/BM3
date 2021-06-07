@@ -128,24 +128,28 @@ function [] = regModelPlots(modelPath, Mdl, ...
 
 
     % plot training/testing actual vs model estimation and 1 to 1
-    plot(YTest,YTest,'k', 'LineWidth', 2)
+    plot([min([min(YTest) min(YTrain)]) ...
+        max([max(YTest) max(YTrain)])], ...
+        [min([min(YTest) min(YTrain)]) ...
+        max([max(YTest) max(YTrain)])],'k', 'LineWidth', 2)
     hold on
-    scatter(YTrain,YTrain,'go')
+    scatter(YTrain,YTrain, 100, 'go', 'filled')
     hold on
-    scatter(YTest_predicted,YTest,'r+')
+    scatter(YTest_predicted,YTest, 100, 'rs', 'filled')
     try
     legend("1:1", strcat("Training r^2 = ",string(r2_train-rem(r2_train,0.01))), ...
         strcat("Testing r^2 = ",string(r2_test-rem(r2_test,0.01))),...
-        'FontSize', 16,'Location', 'southeast');
+        'FontSize', 18,'Location', 'southeast');
     catch
         disp("There was an issue computing r^2 values.")
     end
     title(strcat(modelName, " Scatter Plot"), ...
-        'FontSize', 16, ...
+        'FontSize', 20, ...
         'Interpreter', 'none')
     xlabel(strcat("Estimated ", TargetName), 'FontSize', 16)
     ylabel(strcat("True ", TargetName), 'FontSize', 16)
     ax = gca;
+    set(ax,'FontSize',16)
     % make x and y lims equal
     maxLim = (max(max(max(YTrain), max(YTrain)),max(max(YTest_predicted),max(YTest))));
     minLim = (min(min(min(YTrain), min(YTrain)),min(min(YTest_predicted),min(YTest))));

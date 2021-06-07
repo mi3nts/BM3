@@ -12,7 +12,7 @@
 %     USER = STRING. ex:'U010';
 %     Tobii = STRING. ex:'Tobii01';
 
-function [] = TobiiAudioRead(YEAR, MONTH, DAY, TRIAL, USER, Tobii)
+function [] = TobiiAudioRead(YEAR, MONTH, DAY, TRIAL, USER, Tobii, ffmpegPath)
 
 % navigate to home directory and add function path if not already done
 homeDir
@@ -24,19 +24,14 @@ homeDir
 eval(strcat("cd ", strcat('raw/', pathID, '/', ID,...
     '/segments/1/')))
 
-% set environment path to include libraries in bin
-% NOTE: it is important that ffmpeg is saved to bin!
-% Likely need to hack to get working on Windows OS!
-setenv('PATH', '/usr/local/bin/');
-
 % convert fullstream video to wav file using ffmpeg library from terminal
 % NOTE: matlab was unable to understand .mp4 audio codec that why
 % conversion is necessary
-!ffmpeg -i fullstream.mp4 tobiiaudio.wav;
+cmd = strcat(ffmpegPath, " -i fullstream.mp4 tobiiaudio.wav");
+system(cmd)
 
 % read audio file
 [y,Fs] = audioread('tobiiaudio.wav');
-
 
 % get recording start time 
 fileText = fileread('segment.json');
