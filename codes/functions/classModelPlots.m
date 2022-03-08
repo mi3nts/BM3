@@ -23,25 +23,25 @@ function [] = classModelPlots(modelPath, Mdl, ...
     labels = onehotencode(YTrain, 2);
     labels_predicted = onehotencode(YTrain_predicted, 2);
     
-    % plot roc
-    plotroc(labels',labels_predicted')
-    ax=gca;
-    ax.Legend.String = string(classLabels);
-    ax.Legend.FontSize = 14;
-    ax.Legend.Location = 'southeast';
-    
-    ax.Title.String = strcat(TargetName, " Training ROC");
-    ax.Title.FontSize = 18;
-    
-    ax.XLabel.FontSize = 16;
-    ax.XAxis.FontSize = 16;
-    ax.YLabel.FontSize = 16;
-    ax.YAxis.FontSize = 16;
-    
-    % save training ROC
-    directory = strcat(modelPath,modelName,"/Plots/ROC/");
-    createDir(directory)
-    print(strcat(directory, modelName,"_TrainingROC"),'-dpng')
+%     % plot roc
+%     plotroc(labels',labels_predicted')
+%     ax=gca;
+%     ax.Legend.String = string(classLabels);
+%     ax.Legend.FontSize = 14;
+%     ax.Legend.Location = 'southeast';
+%     
+%     ax.Title.String = strcat(TargetName, " Training ROC");
+%     ax.Title.FontSize = 18;
+%     
+%     ax.XLabel.FontSize = 16;
+%     ax.XAxis.FontSize = 16;
+%     ax.YLabel.FontSize = 16;
+%     ax.YAxis.FontSize = 16;
+%     
+%     % save training ROC
+%     directory = strcat(modelPath,modelName,"/Plots/ROC/");
+%     createDir(directory)
+%     print(strcat(directory, modelName,"_TrainingROC"),'-dpng')
     
      % create figure
     figure(5)
@@ -54,25 +54,25 @@ function [] = classModelPlots(modelPath, Mdl, ...
     labels = onehotencode(YTest, 2);
     labels_predicted = onehotencode(YTest_predicted, 2);
     
-    % plot roc
-    plotroc(labels',labels_predicted')
-    ax=gca;
-    ax.Legend.String = string(classLabels);
-    ax.Legend.FontSize = 14;
-    ax.Legend.Location = 'southeast';
-    
-    ax.Title.String = strcat(TargetName, " Testing ROC");
-    ax.Title.FontSize = 18;
-    
-    ax.XLabel.FontSize = 16;
-    ax.XAxis.FontSize = 16;
-    ax.YLabel.FontSize = 16;
-    ax.YAxis.FontSize = 16;
-    
-    % save training ROC
-    directory = strcat(modelPath,modelName,"/Plots/ROC/");
-    createDir(directory)
-    print(strcat(directory, modelName,"_TestingROC"),'-dpng')
+%     % plot roc
+%     plotroc(labels',labels_predicted')
+%     ax=gca;
+%     ax.Legend.String = string(classLabels);
+%     ax.Legend.FontSize = 14;
+%     ax.Legend.Location = 'southeast';
+%     
+%     ax.Title.String = strcat(TargetName, " Testing ROC");
+%     ax.Title.FontSize = 18;
+%     
+%     ax.XLabel.FontSize = 16;
+%     ax.XAxis.FontSize = 16;
+%     ax.YLabel.FontSize = 16;
+%     ax.YAxis.FontSize = 16;
+%     
+%     % save training ROC
+%     directory = strcat(modelPath,modelName,"/Plots/ROC/");
+%     createDir(directory)
+%     print(strcat(directory, modelName,"_TestingROC"),'-dpng')
     %% PLOT CONFUSION MATRIX
     
     % remove unused categories from categorical arrays

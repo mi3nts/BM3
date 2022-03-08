@@ -17,11 +17,11 @@ function [] = plotHistos(Table)
     [~, numPlots] = size(Table);
 
     % check if number of plots is > 36
-    if numPlots>36
+    if numPlots>25
         % set number of plots for current function call to 36
-        numPlots = 36;
+        numPlots = 25;
         % call function for variables beyond 36
-        plotHistos(Table(:,37:end))
+        plotHistos(Table(:,26:end))
     end
 
     % create figure to plot histograms
@@ -38,10 +38,13 @@ function [] = plotHistos(Table)
     for i = 1:numPlots
         subplot(numRows,numCols, i)
         histogram(Table(:,i).Variables)
+        grid()
+        set(gca,'FontSize', 20)
         % create title for ith histogram
         title(Table.Properties.VariableNames(i), ...
-            'FontSize', 16, ...
-            'Interpreter', 'none')
+            'FontSize', 24, ...
+            'Interpreter', 'tex')
+        ylabel("Count", 'FontSize', 20)
     end
     
 end
